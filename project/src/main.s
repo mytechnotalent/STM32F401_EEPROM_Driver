@@ -25,7 +25,8 @@
 .word _edata                                               // end of .data
 
 /**
- * The start address for the initialization values of the .data section defined in linker script.
+ * The start address for the initialization values of the .data section defined in linker
+ * script.
  */
 .word _sidata                                              // start of .data init values
 
@@ -40,8 +41,8 @@
 .word _ebss                                                // end of .bss
 
 /**
- * Provide weak aliases for each Exception handler to the Default_Handler. As they are weak aliases, 
- * any function with the same name will override this definition.
+ * Provide weak aliases for each Exception handler to the Default_Handler. As they are 
+ * weak aliases, any function with the same name will override this definition.
  */
 .macro weak name
   .global \name                                            // make symbol global
@@ -56,8 +57,8 @@
 .section .isr_vector, "a"                                  // vector table section
 
 /**
- * The STM32F401RE vector table. Note that the proper constructs must be placed on this to ensure 
- * that it ends up at physical address 0x00000000.
+ * The STM32F401RE vector table. Note that the proper constructs must be placed on this 
+ * to ensure that it ends up at physical address 0x00000000.
  */
 .global isr_vector                                         // export vector table
 .type isr_vector, %object                                  // object type
@@ -179,23 +180,23 @@ isr_vector:
 .global Reset_Handler                                      // export symbol
 Reset_Handler:
 .Reset_Handler_Setup:
-  LDR   R4, =_estack                                       // load address at end of the stack into R4
-  MOV   SP, R4                                             // move address at end of stack into SP
-  LDR   R4, =_sdata                                        // copy the data segment initializers from flash to SRAM
-  LDR   R5, =_edata                                        // copy the data segment initializers from flash to SRAM
-  LDR   R6, =_sidata                                       // copy the data segment initializers from flash to SRAM
+  LDR   R4, =_estack                                       // load addr at end of stack R4
+  MOV   SP, R4                                             // move addr at end of stack SP
+  LDR   R4, =_sdata                                        // copy data seg init flash to SRAM
+  LDR   R5, =_edata                                        // copy data seg init flash to SRAM
+  LDR   R6, =_sidata                                       // copy data seg init flash to SRAM
   MOVS  R7, #0                                             // zero offset
   B     .Reset_Handler_Loop_Copy_Data_Init                 // branch
 .Reset_Handler_Copy_Data_Init:
-  LDR   R8, [R6, R7]                                       // copy the data segment initializers into registers
-  STR   R8, [R4, R7]                                       // copy the data segment initializers into registers
+  LDR   R8, [R6, R7]                                       // copy data seg init to regs
+  STR   R8, [R4, R7]                                       // copy data seg init tp regs
   ADDS  R7, R7, #4                                         // increment offset
 .Reset_Handler_Loop_Copy_Data_Init:
   ADDS  R8, R4, R7                                         // initialize the data segment
   CMP   R8, R5                                             // compare
   BCC   .Reset_Handler_Copy_Data_Init                      // branch if carry is clear
-  LDR   R6, =_sbss                                         // copy the bss segment initializers from flash to SRAM
-  LDR   R8, =_ebss                                         // copy the bss segment initializers from flash to SRAM
+  LDR   R6, =_sbss                                         // copy bss seg init flash to SRAM
+  LDR   R8, =_ebss                                         // copy bss seg init flash to SRAM
   MOVS  R7, #0                                             // zero offset
   B     .Reset_Handler_Loop_Fill_Zero_BSS                  // branch
 .Reset_Handler_Fill_Zero_BSS:
@@ -232,7 +233,7 @@ Default_Handler:
  * @brief   Entry point for EEPROM driver initialization and main loop.
  *
  * @details This function initializes the GPIO and I2C peripherals for EEPROM communication
- *          and enters an infinite loop. All code and comments are tailored for EEPROM, not SSD1306.
+ *          and enters an infinite loop. All code and comments are tailored for EEPROM.
  *
  * @param   None
  * @retval  None
@@ -241,15 +242,15 @@ Default_Handler:
 .global main
 main:
 .Push_Registers:
-  PUSH  {R4-R12, LR}                                       // push registers R4-R12, LR to the stack
+  PUSH  {R4-R12, LR}                                       // push registers R4-R12, LR stack
 .GPIOB_Enable:
   BL    GPIOB_Enable                                       // enable GPIOB peripheral
 .GPIOB_PB8_Alt_Function_Mode_Enable:
-  BL    GPIOB_PB8_Alt_Function_Mode_Enable                 // set PB8 to alternate function (I2C1 SCL)
+  BL    GPIOB_PB8_Alt_Function_Mode_Enable                 // set PB8 to alt func (I2C1 SCL)
 .GPIOB_PB8_Open_Drain_Enable:
   BL    GPIOB_PB8_Open_Drain_Enable                        // set PB8 to open-drain
 .GPIOB_PB9_Alt_Function_Mode_Enable:
-  BL    GPIOB_PB9_Alt_Function_Mode_Enable                 // set PB9 to alternate function (I2C1 SDA)
+  BL    GPIOB_PB9_Alt_Function_Mode_Enable                 // set PB9 to alt func (I2C1 SDA)
 .GPIOB_PB9_Open_Drain_Enable:
   BL    GPIOB_PB9_Open_Drain_Enable                        // set PB9 to open-drain
 .I2C1_Enable:
@@ -257,43 +258,44 @@ main:
 .I2C1_Init:
   BL    I2C1_Init                                          // initialize I2C1 for EEPROM
 .EEPROM_Write_Byte_16bit:
-  MOV   R0, #0x50                                          // EEPROM I2C device address (7-bit: 0xA0>>1)
-  MOV   R1, #0x00                                          // EEPROM memory address high byte (0x00 - 0x7F)
-  MOV   R2, #0x00                                          // EEPROM memory address low byte (0x00 - 0xFF)
-  MOV   R3, #0xEF                                          // data byte to write
+  MOV   R0, #0x50                                          // EEPROM I2C device address
+  MOV   R1, #0x00                                          // EEPROM memory address high byte
+  MOV   R2, #0x00                                          // EEPROM memory address low byte
+  MOV   R3, #0x45                                          // data byte to write
   BL    EEPROM_Write_Byte_16bit                            // write byte to EEPROM
   BL    Thirty_Microsecond_Delay                           // wait for write cycle
 .EEPROM_Read_Byte_16bit:
-  MOV   R0, #0x50                                          // EEPROM I2C device address (7-bit: 0xA0>>1)
-  MOV   R1, #0x00                                          // EPROM memory address high byte (0x00 - 0x7F)
+  MOV   R0, #0x50                                          // EEPROM I2C device address
+  MOV   R1, #0x00                                          // EPROM memory address high byte
   MOV   R2, #0x00                                          // EEPROM memory address low byte
   BL    EEPROM_Read_Byte_16bit                             // read byte from EEPROM
 .Loop:
   BL    Loop                                               // enter infinite loop
 .Pop_Registers:
-  POP   {R4-R12, LR}                                       // pop registers R4-R12, LR from the stack
+  POP   {R4-R12, LR}                                       // pop registers R4-R12, LR stack
   BX    LR                                                 // return to caller
 
 /**
  * @brief   Enables the GPIOB peripheral by setting the corresponding RCC_AHB1ENR bit.
  *
- * @details This function enables the GPIOB peripheral by setting the corresponding RCC_AHB1ENR bit. It loads the 
- *          address of the RCC_AHB1ENR register, retrieves the current value of the register, sets the GPIOBEN bit, 
- *          and stores the updated value back into the register.
+ * @details This function enables the GPIOB peripheral by setting the corresponding 
+ *          RCC_AHB1ENR bit. It loads the address of the RCC_AHB1ENR register, retrieves
+ *          the current value of the register, sets the GPIOBEN bit, and stores the updated
+ *          value back into the register.
  *
  * @param   None
  * @retval  None
  */
 GPIOB_Enable:
 .GPIOB_Enable_Push_Registers:
-  PUSH  {R4-R12, LR}                                       // push registers R4-R12, LR to the stack
+  PUSH  {R4-R12, LR}                                       // push registers R4-R12, LR stack
 .GPIOB_Enable_Load_RCC_AHB1ENR:
   LDR   R4, =0x40023830                                    // RCC_AHB1ENR register address
   LDR   R5, [R4]                                           // load value from RCC_AHB1ENR
   ORR   R5, #(1<<1)                                        // set GPIOBEN bit
   STR   R5, [R4]                                           // store value back
 .GPIOB_Enable_Pop_Registers:
-  POP   {R4-R12, LR}                                       // pop registers R4-R12, LR from the stack
+  POP   {R4-R12, LR}                                       // pop registers R4-R12, LR stack
   BX    LR                                                 // return to caller
 
 /**
@@ -306,7 +308,7 @@ GPIOB_Enable:
  */
 GPIOB_PB8_Alt_Function_Mode_Enable:
 .GPIOB_PB8_Alt_Function_Mode_Enable_Push_Registers:
-  PUSH  {R4-R12, LR}                                       // push registers R4-R12, LR to the stack
+  PUSH  {R4-R12, LR}                                       // push registers R4-R12, LR stack
 .GPIOB_PB8_Alt_Function_Mode_Enable_Logic:
   LDR   R4, =0x40020400                                    // GPIOB_MODER register address
   LDR   R5, [R4]                                           // load value from GPIOB_MODER
@@ -321,7 +323,7 @@ GPIOB_PB8_Alt_Function_Mode_Enable:
   BIC   R5, #(1<<0)                                        // clear AFRH8[0]
   STR   R5, [R4]                                           // store value back
 .GPIOB_PB8_Alt_Function_Mode_Enable_Pop_Registers:
-  POP   {R4-R12, LR}                                       // pop registers R4-R12, LR from the stack
+  POP   {R4-R12, LR}                                       // pop registers R4-R12, LR stack
   BX    LR                                                 // return to caller
 
 /**
@@ -334,14 +336,14 @@ GPIOB_PB8_Alt_Function_Mode_Enable:
  */
 GPIOB_PB8_Open_Drain_Enable:
 .GPIOB_PB8_Open_Drain_Enable_Push_Registers:
-  PUSH  {R4-R12, LR}                                       // push registers R4-R12, LR to the stack
+  PUSH  {R4-R12, LR}                                       // push registers R4-R12, LR stack
 .GPIOB_PB8_Open_Drain_Enable_Logic:
   LDR   R4, =0x40020404                                    // GPIOB_OTYPER register address
   LDR   R5, [R4]                                           // load value from GPIOB_OTYPER
   ORR   R5, #(1<<8)                                        // set OT8 bit
   STR   R5, [R4]                                           // store value back
 .GPIOB_PB8_Open_Drain_Enable_Pop_Registers:
-  POP   {R4-R12, LR}                                       // pop registers R4-R12, LR from the stack
+  POP   {R4-R12, LR}                                       // pop registers R4-R12, LR stack
   BX    LR                                                 // return to caller
 
 /**
@@ -354,7 +356,7 @@ GPIOB_PB8_Open_Drain_Enable:
  */
 GPIOB_PB9_Alt_Function_Mode_Enable:
 .GPIOB_PB9_Alt_Function_Mode_Enable_Push_Registers:
-  PUSH  {R4-R12, LR}                                       // push registers R4-R12, LR to the stack
+  PUSH  {R4-R12, LR}                                       // push registers R4-R12, LR stack
 .GPIOB_PB9_Alt_Function_Mode_Enable_Logic:
   LDR   R4, =0x40020400                                    // GPIOB_MODER register address
   LDR   R5, [R4]                                           // load value from GPIOB_MODER
@@ -369,7 +371,7 @@ GPIOB_PB9_Alt_Function_Mode_Enable:
   BIC   R5, #(1<<4)                                        // clear AFRH9[0]
   STR   R5, [R4]                                           // store value back
 .GPIOB_PB9_Alt_Function_Mode_Enable_Pop_Registers:
-  POP   {R4-R12, LR}                                       // pop registers R4-R12, LR from the stack
+  POP   {R4-R12, LR}                                       // pop registers R4-R12, LR stack
   BX    LR                                                 // return to caller
 
 /**
@@ -382,14 +384,14 @@ GPIOB_PB9_Alt_Function_Mode_Enable:
  */
 GPIOB_PB9_Open_Drain_Enable:
 .GPIOB_PB9_Open_Drain_Enable_Push_Registers:
-  PUSH  {R4-R12, LR}                                       // push registers R4-R12, LR to the stack
+  PUSH  {R4-R12, LR}                                       // push registers R4-R12, LR stack
 .GPIOB_PB9_Open_Drain_Enable_Logic:
   LDR   R4, =0x40020404                                    // GPIOB_OTYPER register address
   LDR   R5, [R4]                                           // load value from GPIOB_OTYPER
   ORR   R5, #(1<<9)                                        // set OT9 bit
   STR   R5, [R4]                                           // store value back
 .GPIOB_PB9_Open_Drain_Enable_Pop_Registers:
-  POP   {R4-R12, LR}                                       // pop registers R4-R12, LR from the stack
+  POP   {R4-R12, LR}                                       // pop registers R4-R12, LR stack
   BX    LR                                                 // return to caller
 
 /**
@@ -402,27 +404,27 @@ GPIOB_PB9_Open_Drain_Enable:
  */
 I2C1_Enable:
 .I2C1_Enable_Push_Registers:
-  PUSH  {R4-R12, LR}                                       // push registers R4-R12, LR to the stack
+  PUSH  {R4-R12, LR}                                       // push registers R4-R12, LR stack
 .I2C1_Enable_Logic:
   LDR   R4, =0x40023840                                    // RCC_APB1ENR register address
   LDR   R5, [R4]                                           // load value from RCC_APB1ENR
   ORR   R5, #(1<<21)                                       // set I2C1EN bit
   STR   R5, [R4]                                           // store value back
 .I2C1_Enable_Pop_Registers:
-  POP   {R4-R12, LR}                                       // pop registers R4-R12, LR from the stack
+  POP   {R4-R12, LR}                                       // pop registers R4-R12, LR stack
   BX    LR                                                 // return to caller
 
 /**
  * @brief   Initializes I2C1 peripheral for EEPROM operation.
  *
- * @details Configures I2C1 registers for standard EEPROM I2C operation (100kHz, 7-bit addressing).
+ * @details Configures I2C1 registers for standard EEPROM I2C operation (100kHz, 7-bit addr).
  *
  * @param   None
  * @retval  None
  */
 I2C1_Init:
 .I2C1_Init_Push_Registers:
-  PUSH  {R4-R12, LR}                                       // push registers R4-R12, LR to the stack
+  PUSH  {R4-R12, LR}                                       // push registers R4-R12, LR stack
 .I2C1_Init_Logic:
   LDR   R4, =0x40005400                                    // I2C1_CR1 register address
   LDR   R5, [R4]                                           // load value from I2C1_CR1
@@ -432,7 +434,7 @@ I2C1_Init:
   STR   R5, [R4]                                           // store value back
   LDR   R4, =0x40005404                                    // I2C1_CR2 register address
   LDR   R5, [R4]                                           // load value from I2C1_CR2
-  ORR   R5, #(1<<5)                                        // set FREQ[5:0] for 16 MHz (example)
+  ORR   R5, #(1<<5)                                        // set FREQ[5:0] for 16 MHz
   ORR   R5, #(1<<4)
   BIC   R5, #(1<<3)
   BIC   R5, #(1<<2)
@@ -441,7 +443,7 @@ I2C1_Init:
   STR   R5, [R4]                                           // store value back
   LDR   R4, =0x4000541C                                    // I2C1_CCR register address
   LDR   R5, [R4]                                           // load value from I2C1_CCR
-  ORR   R5, #(1<<15)                                       // set F/S bit (fast/standard mode)
+  ORR   R5, #(1<<15)                                       // set F/S bit (fast/std mode)
   ORR   R5, #(1<<14)                                       // set DUTY bit
   ORR   R5, #(1<<1)
   STR   R5, [R4]                                           // store value back
@@ -459,16 +461,16 @@ I2C1_Init:
   ORR   R5, #(1<<0)                                        // set PE bit (peripheral enable)
   STR   R5, [R4]                                           // store value back
 .I2C1_Init_Pop_Registers:
-  POP   {R4-R12, LR}                                       // pop registers R4-R12, LR from the stack
+  POP   {R4-R12, LR}                                       // pop registers R4-R12, LR stack
   BX    LR                                                 // return to caller
 
 
 /**
  * @brief   Writes a byte to the EEPROM via I2C1 with 16-bit addressing.
  *
- * @details This function writes a byte to the EEPROM using I2C1 with 16-bit memory addressing.
- *          It sends the device address, high byte of memory address, low byte of memory address,
- *          and data byte, then generates a stop condition.
+ * @details This function writes a byte to the EEPROM using I2C1 with 16-bit memory 
+ *          addressing. It sends the device address, high byte of memory address, 
+ *          low byte of memory address, and data byte, then generates a stop condition.
  *
  * @param   R0: EEPROM I2C device address (7-bit, e.g., 0x50 for 0xA0)
  * @param   R1: EEPROM memory address high byte
@@ -478,7 +480,7 @@ I2C1_Init:
  */
 EEPROM_Write_Byte_16bit:
 .EEPROM_Write_Byte_16bit_Push_Registers:
-  PUSH  {R4-R12, LR}                                       // push registers R4-R12, LR to the stack
+  PUSH  {R4-R12, LR}                                       // push registers R4-R12, LR stack
 .EEPROM_Write_Byte_16bit_Init_Load_Registers:
   LDR   R4, =0x40005400                                    // I2C1_CR1 register
   LDR   R5, =0x40005410                                    // I2C1_DR register
@@ -523,16 +525,16 @@ EEPROM_Write_Byte_16bit:
   ORR   R8, #(1<<9)                                        // set STOP
   STR   R8, [R4]                                           // write CR1
 .EEPROM_Write_Byte_16bit_Pop_Registers:
-  POP   {R4-R12, LR}                                       // pop registers R4-R12, LR from the stack
+  POP   {R4-R12, LR}                                       // pop registers R4-R12, LR stack
   BX    LR                                                 // return to caller
 
 /**
  * @brief   Reads a byte from the EEPROM via I2C1 with 16-bit addressing.
  *
- * @details This function reads a byte from the EEPROM using I2C1 with 16-bit memory addressing.
- *          It sends the device address, high byte of memory address, low byte of memory address,
- *          then a repeated start and device address (read), and reads the data byte with proper
- *          NACK generation for single byte read.
+ * @details This function reads a byte from the EEPROM using I2C1 with 16-bit memory 
+ *          addressing. It sends the device address, high byte of memory address, low 
+ *          byte of memory address, then a repeated start and device address (read), 
+ *          and reads the data byte with proper NACK generation for single byte read.
  *
  * @param   R0: EEPROM I2C device address (7-bit, e.g., 0x50 for 0xA0)
  * @param   R1: EEPROM memory address high byte
@@ -541,7 +543,7 @@ EEPROM_Write_Byte_16bit:
  */
 EEPROM_Read_Byte_16bit:
 .EEPROM_Read_Byte_16bit_Push_Registers:
-  PUSH  {R4-R12, LR}                                       // push registers R4-R12, LR to the stack
+  PUSH  {R4-R12, LR}                                       // push registers R4-R12, LR stack
 .EEPROM_Read_Byte_16bit_Init_Load_Registers:
   LDR   R4, =0x40005400                                    // I2C1_CR1 register
   LDR   R5, =0x40005410                                    // I2C1_DR register
@@ -611,39 +613,41 @@ EEPROM_Read_Byte_16bit:
   ORR   R8, #(1<<10)                                       // set ACK bit
   STR   R8, [R4]                                           // write CR1
 .EEPROM_Read_Byte_16bit_Pop_Registers:
-  POP   {R4-R12, LR}                                       // pop registers R4-R12, LR from the stack
+  POP   {R4-R12, LR}                                       // pop registers R4-R12, LR stack
   BX    LR                                                 // return to caller
 
 /**
  * @brief   Delay for approximately 30 microseconds.
  *
- * @details This function creates a delay of approximately 30 microseconds at 16 MHz system clock.
+ * @details This function creates a delay of approximately 30 microseconds at 16 MHz system
+ *          clock.
  *
  * @param   None
  * @retval  None
  */
 Thirty_Microsecond_Delay:
 .Thirty_Microsecond_Delay_Push_Registers:
-  PUSH  {R4-R12, LR}                                       // push registers R4-R12, LR to the stack
+  PUSH  {R4-R12, LR}                                       // push registers R4-R12, LR stack
   MOV   R4, #7                                             // number of loops
 .Thirty_Microsecond_Delay_Outer_Loop:
   MOV   R5, #0xA0                                          // set initial delay count
 .Thirty_Microsecond_Delay_Inner_Loop:
   SUB   R5, #1                                             // decrement delay count
-  CMP   R5, #0                                             // check if delay count reached zero
-  BNE   .Thirty_Microsecond_Delay_Inner_Loop               // continue loop if delay count not reached zero
+  CMP   R5, #0                                             // check delay count reached zero
+  BNE   .Thirty_Microsecond_Delay_Inner_Loop               // cont loop delay count not zero
   SUB   R4, #1                                             // decrement loop counter
-  CMP   R4, #0                                             // check if delay count reached zero
-  BNE   .Thirty_Microsecond_Delay_Outer_Loop               // continue outer loop if more loops to go
+  CMP   R4, #0                                             // check if delay count zero
+  BNE   .Thirty_Microsecond_Delay_Outer_Loop               // cont outer loop if more
 .Thirty_Microsecond_Delay_Pop_Registers:
-  POP   {R4-R12, LR}                                       // pop registers R4-R12, LR from the stack
+  POP   {R4-R12, LR}                                       // pop registers R4-R12, LR stack
   BX    LR                                                 // return to caller
 
 /**
  * @brief   Infinite loop function.
  *
- * @details This function implements an infinite loop using an unconditional branch (B) statement.
- *          It is designed to keep the program running indefinitely by branching back to itself.
+ * @details This function implements an infinite loop using an unconditional branch
+ *          (B) statement. It is designed to keep the program running indefinitely 
+ *          by branching back to itself.
  *
  * @param   None
  * @retval  None
