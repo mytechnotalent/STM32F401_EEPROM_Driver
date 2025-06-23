@@ -1,0 +1,7 @@
+# Build artifacts
+project/*.o
+project/*.elf
+project/*.bin
+
+# Explicitly include VS Code settings
+!.vscode/

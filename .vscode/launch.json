@@ -1,0 +1,31 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "STM32F401RE Debug",
+            "cwd": "${workspaceFolder}/project",
+            "executable": "${workspaceFolder}/project/main.elf",
+            "request": "launch",
+            "type": "cortex-debug",
+            "servertype": "openocd",
+            "serverpath": "/usr/local/bin/openocd",
+            "gdbPath": "/System/Volumes/Data/Applications/ArmGNUToolchain/14.2.rel1/arm-none-eabi/bin/arm-none-eabi-gdb",
+            "device": "STM32F401RE",
+            "configFiles": [
+                "interface/stlink.cfg",
+                "target/stm32f4x.cfg"
+            ],
+            "showDevDebugOutput": "parsed",
+            "preLaunchTask": "Build STM32F401RE Project",
+            "runToEntryPoint": "main",
+            "breakAfterReset": true,
+            "postStartSessionCommands": [
+                "monitor reset halt"
+            ],
+            "postRestartSessionCommands": [
+                "monitor reset halt"
+            ],
+            "overrideGDBServerStartedRegex": ".*Info : Listening on port \\d+ for gdb connections.*"
+        }
+    ]
+}

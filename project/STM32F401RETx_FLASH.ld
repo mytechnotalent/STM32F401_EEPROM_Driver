@@ -1,12 +1,12 @@
 /**
- * FILE: STM32F401CCUX_FLASH.ld
+ * FILE: STM32F401RETx_FLASH.ld
  *
  * DESCRIPTION:
- * This file contains the linker script utilizing the STM32F401CC6 microcontroller.
+ * This file contains the linker script utilizing the STM32F401RE microcontroller.
  *
  * AUTHOR: Kevin Thomas
- * CREATION DATE: March 5, 2024
- * UPDATE Date: March 31, 2024
+ * CREATION DATE: March 7, 2024
+ * UPDATE Date: June 20, 2025
  */
 
 
@@ -19,8 +19,8 @@ _estack = ORIGIN(RAM) + LENGTH(RAM);                       /* end of "RAM" RAM t
 /* The memory definitions. */
 MEMORY
 {
-  RAM (xrw) : ORIGIN = 0x20000000, LENGTH = 64K
-  FLASH (rx) : ORIGIN = 0x08000000, LENGTH = 256K
+  RAM (xrw) : ORIGIN = 0x20000000, LENGTH = 96K
+  FLASH (rx) : ORIGIN = 0x08000000, LENGTH = 512K
 }
 
 /* The sections. */

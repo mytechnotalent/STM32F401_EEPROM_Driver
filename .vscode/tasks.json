@@ -1,0 +1,80 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Build STM32F401RE Project",
+            "type": "shell",
+            "command": "cd ${workspaceFolder}/project && /System/Volumes/Data/Applications/ArmGNUToolchain/14.2.rel1/arm-none-eabi/bin/arm-none-eabi-as -g src/main.s -o main.o && /System/Volumes/Data/Applications/ArmGNUToolchain/14.2.rel1/arm-none-eabi/bin/arm-none-eabi-ld main.o -o main.elf -T STM32F401RETx_FLASH.ld && /System/Volumes/Data/Applications/ArmGNUToolchain/14.2.rel1/arm-none-eabi/bin/arm-none-eabi-objcopy -O binary --strip-all main.elf main.bin",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Clean STM32F401RE Project",
+            "type": "shell",
+            "command": "cd ${workspaceFolder}/project && rm -f main.o main.elf main.bin",
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            }
+        },
+        {
+            "label": "Kill OpenOCD Processes",
+            "type": "shell",
+            "command": "pkill -f openocd || echo 'No OpenOCD processes found'",
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            }
+        },
+        {
+            "label": "Debug Cleanup",
+            "type": "shell",
+            "command": "${workspaceFolder}/debug_cleanup.sh",
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            }
+        },
+        {
+            "label": "Flash STM32F401RE Project",
+            "type": "shell",
+            "command": "cd ${workspaceFolder}/project && openocd -f interface/stlink.cfg -f target/stm32f4x.cfg -c \"program main.elf verify reset exit\"",
+            "group": "build",
+            "dependsOn": "Build STM32F401RE Project",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            }
+        }
+    ]
+}

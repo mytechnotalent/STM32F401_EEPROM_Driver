@@ -1,0 +1,5 @@
+{
+    "cortex-debug.variableUseNaturalFormat": false,
+    "debug.allowBreakpointsEverywhere": true,
+    "debug.openDebug": "openOnDebugBreak"
+}
