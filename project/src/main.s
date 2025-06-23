@@ -2,8 +2,7 @@
  * FILE: main.s
  *
  * DESCRIPTION:
- * This file contains the assembly code for a STM32F401 EEPROM driver utilizing the STM32F401RE
- * microcontroller.
+ * An STM32F401 EEPROM driver written entirely in Assembler.
  *
  * AUTHOR: Kevin Thomas
  * CREATION DATE: March 7, 2024
@@ -179,6 +178,7 @@ isr_vector:
 .type Reset_Handler, %function                             // function type
 .global Reset_Handler                                      // export symbol
 Reset_Handler:
+.Reset_Handler_Setup:
   LDR   R4, =_estack                                       // load address at end of the stack into R4
   MOV   SP, R4                                             // move address at end of stack into SP
   LDR   R4, =_sdata                                        // copy the data segment initializers from flash to SRAM
@@ -204,6 +204,7 @@ Reset_Handler:
 .Reset_Handler_Loop_Fill_Zero_BSS:
   CMP   R6, R8                                             // compare
   BCC   .Reset_Handler_Fill_Zero_BSS                       // branch if carry is clear
+.Reset_Handler_Call_Main:
   BL    main                                               // call main
 
 /**
@@ -239,21 +240,29 @@ Default_Handler:
 .type main, %function
 .global main
 main:
+.Push_Registers:
   PUSH  {R4-R12, LR}                                       // push registers R4-R12, LR to the stack
+.GPIOB_Enable:
   BL    GPIOB_Enable                                       // enable GPIOB peripheral
+.GPIOB_PB8_Alt_Function_Mode_Enable:
   BL    GPIOB_PB8_Alt_Function_Mode_Enable                 // set PB8 to alternate function (I2C1 SCL)
+.GPIOB_PB8_Open_Drain_Enable:
   BL    GPIOB_PB8_Open_Drain_Enable                        // set PB8 to open-drain
+.GPIOB_PB9_Alt_Function_Mode_Enable:
   BL    GPIOB_PB9_Alt_Function_Mode_Enable                 // set PB9 to alternate function (I2C1 SDA)
+.GPIOB_PB9_Open_Drain_Enable:
   BL    GPIOB_PB9_Open_Drain_Enable                        // set PB9 to open-drain
+.I2C1_Enable:
   BL    I2C1_Enable                                        // enable I2C1 peripheral
+.I2C1_Init:
   BL    I2C1_Init                                          // initialize I2C1 for EEPROM
-//.EEPROM_Write_Byte_16bit:
-//  MOV   R0, #0x50                                          // EEPROM I2C device address (7-bit: 0xA0>>1)
-//  MOV   R1, #0x00                                          // EEPROM memory address high byte (0x00 - 0x7F)
-//  MOV   R2, #0x00                                          // EEPROM memory address low byte (0x00 - 0xFF)
-//  MOV   R3, #0x66                                          // data byte to write
-//  BL    EEPROM_Write_Byte_16bit                            // write byte to EEPROM
-//  BL    Thirty_Microsecond_Delay                           // wait for write cycle
+.EEPROM_Write_Byte_16bit:
+  MOV   R0, #0x50                                          // EEPROM I2C device address (7-bit: 0xA0>>1)
+  MOV   R1, #0x00                                          // EEPROM memory address high byte (0x00 - 0x7F)
+  MOV   R2, #0x00                                          // EEPROM memory address low byte (0x00 - 0xFF)
+  MOV   R3, #0xEF                                          // data byte to write
+  BL    EEPROM_Write_Byte_16bit                            // write byte to EEPROM
+  BL    Thirty_Microsecond_Delay                           // wait for write cycle
 .EEPROM_Read_Byte_16bit:
   MOV   R0, #0x50                                          // EEPROM I2C device address (7-bit: 0xA0>>1)
   MOV   R1, #0x00                                          // EPROM memory address high byte (0x00 - 0x7F)
@@ -261,6 +270,7 @@ main:
   BL    EEPROM_Read_Byte_16bit                             // read byte from EEPROM
 .Loop:
   BL    Loop                                               // enter infinite loop
+.Pop_Registers:
   POP   {R4-R12, LR}                                       // pop registers R4-R12, LR from the stack
   BX    LR                                                 // return to caller
 
@@ -275,11 +285,14 @@ main:
  * @retval  None
  */
 GPIOB_Enable:
+.GPIOB_Enable_Push_Registers:
   PUSH  {R4-R12, LR}                                       // push registers R4-R12, LR to the stack
+.GPIOB_Enable_Load_RCC_AHB1ENR:
   LDR   R4, =0x40023830                                    // RCC_AHB1ENR register address
   LDR   R5, [R4]                                           // load value from RCC_AHB1ENR
   ORR   R5, #(1<<1)                                        // set GPIOBEN bit
   STR   R5, [R4]                                           // store value back
+.GPIOB_Enable_Pop_Registers:
   POP   {R4-R12, LR}                                       // pop registers R4-R12, LR from the stack
   BX    LR                                                 // return to caller
 
@@ -292,7 +305,9 @@ GPIOB_Enable:
  * @retval  None
  */
 GPIOB_PB8_Alt_Function_Mode_Enable:
+.GPIOB_PB8_Alt_Function_Mode_Enable_Push_Registers:
   PUSH  {R4-R12, LR}                                       // push registers R4-R12, LR to the stack
+.GPIOB_PB8_Alt_Function_Mode_Enable_Logic:
   LDR   R4, =0x40020400                                    // GPIOB_MODER register address
   LDR   R5, [R4]                                           // load value from GPIOB_MODER
   ORR   R5, #(1<<17)                                       // set MODER8[1]
@@ -305,6 +320,7 @@ GPIOB_PB8_Alt_Function_Mode_Enable:
   BIC   R5, #(1<<1)                                        // clear AFRH8[1]
   BIC   R5, #(1<<0)                                        // clear AFRH8[0]
   STR   R5, [R4]                                           // store value back
+.GPIOB_PB8_Alt_Function_Mode_Enable_Pop_Registers:
   POP   {R4-R12, LR}                                       // pop registers R4-R12, LR from the stack
   BX    LR                                                 // return to caller
 
@@ -317,11 +333,14 @@ GPIOB_PB8_Alt_Function_Mode_Enable:
  * @retval  None
  */
 GPIOB_PB8_Open_Drain_Enable:
+.GPIOB_PB8_Open_Drain_Enable_Push_Registers:
   PUSH  {R4-R12, LR}                                       // push registers R4-R12, LR to the stack
+.GPIOB_PB8_Open_Drain_Enable_Logic:
   LDR   R4, =0x40020404                                    // GPIOB_OTYPER register address
   LDR   R5, [R4]                                           // load value from GPIOB_OTYPER
   ORR   R5, #(1<<8)                                        // set OT8 bit
   STR   R5, [R4]                                           // store value back
+.GPIOB_PB8_Open_Drain_Enable_Pop_Registers:
   POP   {R4-R12, LR}                                       // pop registers R4-R12, LR from the stack
   BX    LR                                                 // return to caller
 
@@ -334,7 +353,9 @@ GPIOB_PB8_Open_Drain_Enable:
  * @retval  None
  */
 GPIOB_PB9_Alt_Function_Mode_Enable:
+.GPIOB_PB9_Alt_Function_Mode_Enable_Push_Registers:
   PUSH  {R4-R12, LR}                                       // push registers R4-R12, LR to the stack
+.GPIOB_PB9_Alt_Function_Mode_Enable_Logic:
   LDR   R4, =0x40020400                                    // GPIOB_MODER register address
   LDR   R5, [R4]                                           // load value from GPIOB_MODER
   ORR   R5, #(1<<19)                                       // set MODER9[1]
@@ -347,6 +368,7 @@ GPIOB_PB9_Alt_Function_Mode_Enable:
   BIC   R5, #(1<<5)                                        // clear AFRH9[1]
   BIC   R5, #(1<<4)                                        // clear AFRH9[0]
   STR   R5, [R4]                                           // store value back
+.GPIOB_PB9_Alt_Function_Mode_Enable_Pop_Registers:
   POP   {R4-R12, LR}                                       // pop registers R4-R12, LR from the stack
   BX    LR                                                 // return to caller
 
@@ -359,11 +381,14 @@ GPIOB_PB9_Alt_Function_Mode_Enable:
  * @retval  None
  */
 GPIOB_PB9_Open_Drain_Enable:
+.GPIOB_PB9_Open_Drain_Enable_Push_Registers:
   PUSH  {R4-R12, LR}                                       // push registers R4-R12, LR to the stack
+.GPIOB_PB9_Open_Drain_Enable_Logic:
   LDR   R4, =0x40020404                                    // GPIOB_OTYPER register address
   LDR   R5, [R4]                                           // load value from GPIOB_OTYPER
   ORR   R5, #(1<<9)                                        // set OT9 bit
   STR   R5, [R4]                                           // store value back
+.GPIOB_PB9_Open_Drain_Enable_Pop_Registers:
   POP   {R4-R12, LR}                                       // pop registers R4-R12, LR from the stack
   BX    LR                                                 // return to caller
 
@@ -376,11 +401,14 @@ GPIOB_PB9_Open_Drain_Enable:
  * @retval  None
  */
 I2C1_Enable:
+.I2C1_Enable_Push_Registers:
   PUSH  {R4-R12, LR}                                       // push registers R4-R12, LR to the stack
+.I2C1_Enable_Logic:
   LDR   R4, =0x40023840                                    // RCC_APB1ENR register address
   LDR   R5, [R4]                                           // load value from RCC_APB1ENR
   ORR   R5, #(1<<21)                                       // set I2C1EN bit
   STR   R5, [R4]                                           // store value back
+.I2C1_Enable_Pop_Registers:
   POP   {R4-R12, LR}                                       // pop registers R4-R12, LR from the stack
   BX    LR                                                 // return to caller
 
@@ -393,7 +421,9 @@ I2C1_Enable:
  * @retval  None
  */
 I2C1_Init:
+.I2C1_Init_Push_Registers:
   PUSH  {R4-R12, LR}                                       // push registers R4-R12, LR to the stack
+.I2C1_Init_Logic:
   LDR   R4, =0x40005400                                    // I2C1_CR1 register address
   LDR   R5, [R4]                                           // load value from I2C1_CR1
   ORR   R5, #(1<<15)                                       // set SWRST bit (software reset)
@@ -428,6 +458,7 @@ I2C1_Init:
   LDR   R5, [R4]                                           // load value from I2C1_CR1
   ORR   R5, #(1<<0)                                        // set PE bit (peripheral enable)
   STR   R5, [R4]                                           // store value back
+.I2C1_Init_Pop_Registers:
   POP   {R4-R12, LR}                                       // pop registers R4-R12, LR from the stack
   BX    LR                                                 // return to caller
 
