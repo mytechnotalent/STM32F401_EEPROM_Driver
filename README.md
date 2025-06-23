@@ -447,27 +447,27 @@ I2C1_Init:
   STR   R5, [R4]                                           // store value back
   LDR   R4, =0x40005404                                    // I2C1_CR2 register address
   LDR   R5, [R4]                                           // load value from I2C1_CR2
-  ORR   R5, #(1<<5)                                        // set FREQ[5:0] for 16 MHz
-  ORR   R5, #(1<<4)
-  BIC   R5, #(1<<3)
-  BIC   R5, #(1<<2)
-  ORR   R5, #(1<<1)
-  BIC   R5, #(1<<0)
+  ORR   R5, #(1<<5)                                        // set FREQ[5] 50 MHz (PIML)
+  ORR   R5, #(1<<4)                                        // set FREQ[5] 50 MHz (PIML)
+  BIC   R5, #(1<<3)                                        // clear FREQ[5] 50 MHz (PIML)
+  BIC   R5, #(1<<2)                                        // clear FREQ[5] 50 MHz (PIML)
+  ORR   R5, #(1<<1)                                        // set FREQ[5] 50 MHz (PIML)
+  BIC   R5, #(1<<0)                                        // clear FREQ[5] 50 MHz (PIML)
   STR   R5, [R4]                                           // store value back
   LDR   R4, =0x4000541C                                    // I2C1_CCR register address
   LDR   R5, [R4]                                           // load value from I2C1_CCR
   ORR   R5, #(1<<15)                                       // set F/S bit (fast/std mode)
   ORR   R5, #(1<<14)                                       // set DUTY bit
-  ORR   R5, #(1<<1)
+  ORR   R5, #(1<<1)                                        // set CCR[1] (clock control)
   STR   R5, [R4]                                           // store value back
   LDR   R4, =0x40005420                                    // I2C1_TRISE register address
   LDR   R5, [R4]                                           // load value from I2C1_TRISE
-  BIC   R5, #(1<<5)
-  ORR   R5, #(1<<4)
-  BIC   R5, #(1<<3)
-  ORR   R5, #(1<<2)
-  BIC   R5, #(1<<1)
-  BIC   R5, #(1<<0)
+  BIC   R5, #(1<<5)                                        // clear TRISE[5] (max rise time)
+  ORR   R5, #(1<<4)                                        // set TRISE[4] (max rise time)           
+  BIC   R5, #(1<<3)                                        // clear TRISE[5] (max rise time)
+  ORR   R5, #(1<<2)                                        // set TRISE[4] (max rise time) 
+  BIC   R5, #(1<<1)                                        // clear TRISE[5] (max rise time)
+  BIC   R5, #(1<<0)                                        // clear TRISE[4] (max rise time)
   STR   R5, [R4]                                           // store value back
   LDR   R4, =0x40005400                                    // I2C1_CR1 register address
   LDR   R5, [R4]                                           // load value from I2C1_CR1
@@ -476,7 +476,6 @@ I2C1_Init:
 .I2C1_Init_Pop_Registers:
   POP   {R4-R12, LR}                                       // pop registers R4-R12, LR stack
   BX    LR                                                 // return to caller
-
 
 /**
  * @brief   Writes a byte to the EEPROM via I2C1 with 16-bit addressing.

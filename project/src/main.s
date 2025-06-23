@@ -464,7 +464,6 @@ I2C1_Init:
   POP   {R4-R12, LR}                                       // pop registers R4-R12, LR stack
   BX    LR                                                 // return to caller
 
-
 /**
  * @brief   Writes a byte to the EEPROM via I2C1 with 16-bit addressing.
  *
