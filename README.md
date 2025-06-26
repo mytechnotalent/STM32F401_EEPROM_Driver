@@ -196,21 +196,21 @@ Reset_Handler:
 .Reset_Handler_Setup:
   LDR   R4, =_estack                                  // load addr at end of stack R4
   MOV   SP, R4                                        // move addr at end of stack SP
-  LDR   R4, =_sdata                                   // copy data seg init flash to SRAM
-  LDR   R5, =_edata                                   // copy data seg init flash to SRAM
-  LDR   R6, =_sidata                                  // copy data seg init flash to SRAM
+  LDR   R4, =_sdata                                   // cp data seg init flash to SRAM
+  LDR   R5, =_edata                                   // cp data seg init flash to SRAM
+  LDR   R6, =_sidata                                  // cp data seg init flash to SRAM
   MOVS  R7, #0                                        // zero offset
-  B     .Reset_Handler_Loop_Copy_Data_Init            // branch
-.Reset_Handler_Copy_Data_Init:
-  LDR   R8, [R6, R7]                                  // copy data seg init to regs
-  STR   R8, [R4, R7]                                  // copy data seg init tp regs
+  B     .Reset_Handler_Loop_cp_Data_Init              // branch
+.Reset_Handler_cp_Data_Init:
+  LDR   R8, [R6, R7]                                  // cp data seg init to regs
+  STR   R8, [R4, R7]                                  // cp data seg init tp regs
   ADDS  R7, R7, #4                                    // increment offset
-.Reset_Handler_Loop_Copy_Data_Init:
+.Reset_Handler_Loop_cp_Data_Init:
   ADDS  R8, R4, R7                                    // initialize the data segment
   CMP   R8, R5                                        // compare
-  BCC   .Reset_Handler_Copy_Data_Init                 // branch if carry is clear
-  LDR   R6, =_sbss                                    // copy bss seg init flash to SRAM
-  LDR   R8, =_ebss                                    // copy bss seg init flash to SRAM
+  BCC   .Reset_Handler_cp_Data_Init                   // branch if carry is clear
+  LDR   R6, =_sbss                                    // cp bss seg init flash to SRAM
+  LDR   R8, =_ebss                                    // cp bss seg init flash to SRAM
   MOVS  R7, #0                                        // zero offset
   B     .Reset_Handler_Loop_Fill_Zero_BSS             // branch
 .Reset_Handler_Fill_Zero_BSS:
