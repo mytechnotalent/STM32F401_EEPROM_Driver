@@ -276,7 +276,7 @@ main:
   MOV   R0, #0x50                                     // EEPROM I2C device address
   MOV   R1, #0x00                                     // EEPROM memory address high byte
   MOV   R2, #0x00                                     // EEPROM memory address low byte
-  MOV   R3, #0x11                                     // data byte to write
+  MOV   R3, #0x22                                     // data byte to write
   BL    EEPROM_Write_Byte_16bit                       // write byte to EEPROM
   BL    Thirty_Microsecond_Delay                      // wait for write cycle
 .EEPROM_Read_Byte_16bit:
@@ -522,13 +522,13 @@ EEPROM_Write_Byte_16bit:
   TST   R8, #(1<<1)                                   // test ADDR
   BEQ   .EEPROM_Write_Byte_16bit_Wait_For_Addr        // wait until set
   LDR   R8, [R7]                                      // clear ADDR by reading SR2
-.EEPROM_Write_Byte_16bit_Send_Memory_Address_High_Byte:
+.EEPROM_Write_Byte_16bit_Send_Memory_Addr_High_Byte:
   STR   R1, [R5]                                      // write DR
 .EEPROM_Write_Byte_16bit_Wait_For_TxE_1:
   LDR   R8, [R6]                                      // read SR1
   TST   R8, #(1<<7)                                   // test TxE
   BEQ   .EEPROM_Write_Byte_16bit_Wait_For_TxE_1       // wait until set
-.EEPROM_Write_Byte_16bit_Send_Memory_Address_Low_Byte:
+.EEPROM_Write_Byte_16bit_Send_Memory_Addr_Low_Byte:
   STR   R2, [R5]                                      // write DR
 .EEPROM_Write_Byte_16bit_Wait_For_TxE_2:
   LDR   R8, [R6]                                      // read SR1
@@ -585,13 +585,13 @@ EEPROM_Read_Byte_16bit:
   TST   R8, #(1<<1)                                   // test ADDR
   BEQ   .EEPROM_Read_Byte_16bit_Wait_For_Addr_1       // wait until set
   LDR   R8, [R7]                                      // clear ADDR by reading SR2
-.EEPROM_Read_Byte_16bit_Send_Memory_Address_High_Byte:
+.EEPROM_Read_Byte_16bit_Send_Memory_Addr_High_Byte:
   STR   R1, [R5]                                      // write DR
 .EEPROM_Read_Byte_16bit_Wait_For_TxE_1:
   LDR   R8, [R6]                                      // read SR1
   TST   R8, #(1<<7)                                   // test TxE
   BEQ   .EEPROM_Read_Byte_16bit_Wait_For_TxE_1        // wait until set
-.EEPROM_Read_Byte_16bit_Send_Memory_Address_Low_Byte:
+.EEPROM_Read_Byte_16bit_Send_Memory_Addr_Low_Byte:
   STR   R2, [R5]                                      // write DR
 .EEPROM_Read_Byte_16bit_Wait_For_TxE_2:
   LDR   R8, [R6]                                      // read SR1
@@ -613,7 +613,7 @@ EEPROM_Read_Byte_16bit:
   LDR   R8, [R6]                                      // read SR1
   TST   R8, #(1<<1)                                   // test ADDR
   BEQ   .EEPROM_Read_Byte_16bit_Wait_For_Addr_2       // wait until set
-.EEPROM_Read_Byte_16bit_Disable_ACK_For_Single_Byte_Read: 
+.EEPROM_Read_Byte_16bit_Dis_ACK_For_Single_Byte_Read: 
   LDR   R8, [R4]                                      // read CR1
   BIC   R8, #(1<<10)                                  // clear ACK bit
   STR   R8, [R4]                                      // write CR1
