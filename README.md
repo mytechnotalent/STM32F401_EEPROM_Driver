@@ -28,28 +28,28 @@ An STM32F401 EEPROM driver written entirely in Assembler.
 .thumb                                                // use Thumb instruction set
 
 /**
- * The start address for the .data section defined in linker script.
+ * The start addr for the .data section defined in linker script.
  */
 .word _sdata                                          // start of .data
 
 /**
- * The end address for the .data section defined in linker script.
+ * The end addr for the .data section defined in linker script.
  */
 .word _edata                                          // end of .data
 
 /**
- * The start address for the initialization values of the .data section defined in
+ * The start addr for the initialization values of the .data section defined in
  * linker script.
  */
 .word _sidata                                         // start of .data init values
 
 /**
- * The start address for the .bss section defined in linker script.
+ * The start addr for the .bss section defined in linker script.
  */
 .word _sbss                                           // start of .bss
 
 /**
- * The end address for the .bss section defined in linker script.
+ * The end addr for the .bss section defined in linker script.
  */
 .word _ebss                                           // end of .bss
 
@@ -72,7 +72,7 @@ An STM32F401 EEPROM driver written entirely in Assembler.
 
 /**
  * The STM32F401RE vector table. Note that the proper constructs must be placed 
- * on this to ensure that it ends up at physical address 0x00000000.
+ * on this to ensure that it ends up at physical addr 0x00000000.
  */
 .global isr_vector                                    // export vector table
 .type isr_vector, %object                             // object type
@@ -273,16 +273,16 @@ main:
 .I2C1_Init:
   BL    I2C1_Init                                     // initialize I2C1 for EEPROM
 .EEPROM_Write_Byte_16bit:
-  MOV   R0, #0x50                                     // EEPROM I2C device address
-  MOV   R1, #0x00                                     // EEPROM memory address high byte
-  MOV   R2, #0x00                                     // EEPROM memory address low byte
+  MOV   R0, #0x50                                     // EEPROM I2C device addr
+  MOV   R1, #0x00                                     // EEPROM memory addr high byte
+  MOV   R2, #0x00                                     // EEPROM memory addr low byte
   MOV   R3, #0x11                                     // data byte to write
   BL    EEPROM_Write_Byte_16bit                       // write byte to EEPROM
   BL    Thirty_Microsecond_Delay                      // wait for write cycle
 .EEPROM_Read_Byte_16bit:
-  MOV   R0, #0x50                                     // EEPROM I2C device address
-  MOV   R1, #0x00                                     // EPROM memory address high byte
-  MOV   R2, #0x00                                     // EEPROM memory address low byte
+  MOV   R0, #0x50                                     // EEPROM I2C device addr
+  MOV   R1, #0x00                                     // EPROM memory addr high byte
+  MOV   R2, #0x00                                     // EEPROM memory addr low byte
   BL    EEPROM_Read_Byte_16bit                        // read byte from EEPROM
 .Loop:
   BL    Loop                                          // enter infinite loop
@@ -294,7 +294,7 @@ main:
  * @brief   Enables the GPIOB peripheral by setting the corresponding RCC_AHB1ENR bit.
  *
  * @details This function enables the GPIOB peripheral by setting the corresponding 
- *          RCC_AHB1ENR bit. It loads the address of the RCC_AHB1ENR register, retrieves
+ *          RCC_AHB1ENR bit. It loads the addr of the RCC_AHB1ENR register, retrieves
  *          the current value of the register, sets the GPIOBEN bit, and stores the 
  *          updated value back into the register.
  *
@@ -305,7 +305,7 @@ GPIOB_Enable:
 .GPIOB_Enable_Push_Registers:
   PUSH  {R4-R12, LR}                                  // push regs R4-R12, LR stack
 .GPIOB_Enable_Load_RCC_AHB1ENR:
-  LDR   R4, =0x40023830                               // RCC_AHB1ENR register address
+  LDR   R4, =0x40023830                               // RCC_AHB1ENR register addr
   LDR   R5, [R4]                                      // load value from RCC_AHB1ENR
   ORR   R5, #(1<<1)                                   // set GPIOBEN bit
   STR   R5, [R4]                                      // store value back
@@ -325,13 +325,13 @@ GPIOB_PB8_Alt_Function_Mode_Enable:
 .GPIOB_PB8_Alt_Function_Mode_Enable_Push_Registers:
   PUSH  {R4-R12, LR}                                  // push regs R4-R12, LR stack
 .GPIOB_PB8_Alt_Function_Mode_Enable_Set_Moder:
-  LDR   R4, =0x40020400                               // GPIOB_MODER register address
+  LDR   R4, =0x40020400                               // GPIOB_MODER register addr
   LDR   R5, [R4]                                      // load value from GPIOB_MODER
   ORR   R5, #(1<<17)                                  // set MODER8[1]
   BIC   R5, #(1<<16)                                  // clear MODER8[0]
   STR   R5, [R4]                                      // store value back
 .GPIOB_PB8_Alt_Function_Mode_Enable_Set_AFRH:
-  LDR   R4, =0x40020424                               // GPIOB_AFRH register address
+  LDR   R4, =0x40020424                               // GPIOB_AFRH register addr
   LDR   R5, [R4]                                      // load value from GPIOB_AFRH
   BIC   R5, #(1<<3)                                   // clear AFRH8[3]
   ORR   R5, #(1<<2)                                   // set AFRH8[2]
@@ -354,7 +354,7 @@ GPIOB_PB8_Open_Drain_Enable:
 .GPIOB_PB8_Open_Drain_Enable_Push_Registers:
   PUSH  {R4-R12, LR}                                  // push regs R4-R12, LR stack
 .GPIOB_PB8_Open_Drain_Enable_Set_OTYPER:
-  LDR   R4, =0x40020404                               // GPIOB_OTYPER register address
+  LDR   R4, =0x40020404                               // GPIOB_OTYPER register addr
   LDR   R5, [R4]                                      // load value from GPIOB_OTYPER
   ORR   R5, #(1<<8)                                   // set OT8 bit
   STR   R5, [R4]                                      // store value back
@@ -374,13 +374,13 @@ GPIOB_PB9_Alt_Function_Mode_Enable:
 .GPIOB_PB9_Alt_Function_Mode_Enable_Push_Registers:
   PUSH  {R4-R12, LR}                                  // push regs R4-R12, LR stack
 .GPIOB_PB9_Alt_Function_Mode_Enable_Set_Moder:
-  LDR   R4, =0x40020400                               // GPIOB_MODER register address
+  LDR   R4, =0x40020400                               // GPIOB_MODER register addr
   LDR   R5, [R4]                                      // load value from GPIOB_MODER
   ORR   R5, #(1<<19)                                  // set MODER9[1]
   BIC   R5, #(1<<18)                                  // clear MODER9[0]
   STR   R5, [R4]                                      // store value back
 .GPIOB_PB9_Alt_Function_Mode_Enable_Set_AFRH:
-  LDR   R4, =0x40020424                               // GPIOB_AFRH register address
+  LDR   R4, =0x40020424                               // GPIOB_AFRH register addr
   LDR   R5, [R4]                                      // load value from GPIOB_AFRH
   BIC   R5, #(1<<7)                                   // clear AFRH9[3]
   ORR   R5, #(1<<6)                                   // set AFRH9[2]
@@ -403,7 +403,7 @@ GPIOB_PB9_Open_Drain_Enable:
 .GPIOB_PB9_Open_Drain_Enable_Push_Registers:
   PUSH  {R4-R12, LR}                                  // push regs R4-R12, LR stack
 .GPIOB_PB9_Open_Drain_Enable_Set_OTYPER:
-  LDR   R4, =0x40020404                               // GPIOB_OTYPER register address
+  LDR   R4, =0x40020404                               // GPIOB_OTYPER register addr
   LDR   R5, [R4]                                      // load value from GPIOB_OTYPER
   ORR   R5, #(1<<9)                                   // set OT9 bit
   STR   R5, [R4]                                      // store value back
@@ -424,7 +424,7 @@ I2C1_Enable:
 .I2C1_Enable_Push_Registers:
   PUSH  {R4-R12, LR}                                  // push regs R4-R12, LR stack
 .I2C1_Enable_Set_APB1ENR:
-  LDR   R4, =0x40023840                               // RCC_APB1ENR register address
+  LDR   R4, =0x40023840                               // RCC_APB1ENR register addr
   LDR   R5, [R4]                                      // load value from RCC_APB1ENR
   ORR   R5, #(1<<21)                                  // set I2C1EN bit
   STR   R5, [R4]                                      // store value back
@@ -445,14 +445,14 @@ I2C1_Init:
 .I2C1_Init_Push_Registers:
   PUSH  {R4-R12, LR}                                  // push regs R4-R12, LR stack
 .I2C1_Init_Reset_CR1:
-  LDR   R4, =0x40005400                               // I2C1_CR1 register address
+  LDR   R4, =0x40005400                               // I2C1_CR1 register addr
   LDR   R5, [R4]                                      // load value from I2C1_CR1
   ORR   R5, #(1<<15)                                  // set SWRST bit (software reset)
   STR   R5, [R4]                                      // store value back
   BIC   R5, #(1<<15)                                  // clear SWRST bit
   STR   R5, [R4]                                      // store value back
 .I2C1_Init_Set_CR2:
-  LDR   R4, =0x40005404                               // I2C1_CR2 register address
+  LDR   R4, =0x40005404                               // I2C1_CR2 register addr
   LDR   R5, [R4]                                      // load value from I2C1_CR2
   ORR   R5, #(1<<5)                                   // set FREQ[5] 50 MHz (PIML)
   ORR   R5, #(1<<4)                                   // set FREQ[5] 50 MHz (PIML)
@@ -462,13 +462,13 @@ I2C1_Init:
   BIC   R5, #(1<<0)                                   // clear FREQ[5] 50 MHz (PIML)
   STR   R5, [R4]                                      // store value back
 .I2C1_Init_Set_CCR:
-  LDR   R4, =0x4000541C                               // I2C1_CCR register address
+  LDR   R4, =0x4000541C                               // I2C1_CCR register addr
   LDR   R5, [R4]                                      // load value from I2C1_CCR
   ORR   R5, #(1<<15)                                  // set F/S bit (fast/std mode)
   ORR   R5, #(1<<14)                                  // set DUTY bit
   ORR   R5, #(1<<1)                                   // set CCR[1] (clock control)
   STR   R5, [R4]                                      // store value back
-  LDR   R4, =0x40005420                               // I2C1_TRISE register address
+  LDR   R4, =0x40005420                               // I2C1_TRISE register addr
   LDR   R5, [R4]                                      // load value from I2C1_TRISE
   BIC   R5, #(1<<5)                                   // clear TRISE[5] (max rise time)
   ORR   R5, #(1<<4)                                   // set TRISE[4] (max rise time)           
@@ -477,7 +477,7 @@ I2C1_Init:
   BIC   R5, #(1<<1)                                   // clear TRISE[5] (max rise time)
   BIC   R5, #(1<<0)                                   // clear TRISE[4] (max rise time)
   STR   R5, [R4]                                      // store value back
-  LDR   R4, =0x40005400                               // I2C1_CR1 register address
+  LDR   R4, =0x40005400                               // I2C1_CR1 register addr
   LDR   R5, [R4]                                      // load value from I2C1_CR1
   ORR   R5, #(1<<0)                                   // set PE bit (peripheral enable)
   STR   R5, [R4]                                      // store value back
@@ -486,15 +486,15 @@ I2C1_Init:
   BX    LR                                            // return to caller
 
 /**
- * @brief   Writes a byte to the EEPROM via I2C1 with 16-bit addressing.
+ * @brief   Writes a byte to the EEPROM via I2C1 with 16-bit addring.
  *
  * @details This function writes a byte to the EEPROM using I2C1 with 16-bit memory 
- *          addressing. It sends the device address, high byte of memory address, 
- *          low byte of memory address, and data byte, then generates a stop condition.
+ *          addring. It sends the device addr, high byte of memory addr, 
+ *          low byte of memory addr, and data byte, then generates a stop condition.
  *
- * @param   R0: EEPROM I2C device address (7-bit, e.g., 0x50 for 0xA0)
- * @param   R1: EEPROM memory address high byte
- * @param   R2: EEPROM memory address low byte  
+ * @param   R0: EEPROM I2C device addr (7-bit, e.g., 0x50 for 0xA0)
+ * @param   R1: EEPROM memory addr high byte
+ * @param   R2: EEPROM memory addr low byte  
  * @param   R3: Data byte to write
  * @retval  None
  */
@@ -514,21 +514,21 @@ EEPROM_Write_Byte_16bit:
   LDR   R8, [R6]                                      // read SR1
   TST   R8, #1                                        // test SB
   BEQ   .EEPROM_Write_Byte_16bit_Wait_Start_Bit       // wait until set
-.EEPROM_Write_Byte_16bit_Send_Device_Address:
-  LSL   R8, R0, #1                                    // left-align address, write=0
+.EEPROM_Write_Byte_16bit_Send_Device_addr:
+  LSL   R8, R0, #1                                    // left-align addr, write=0
   STR   R8, [R5]                                      // write DR
 .EEPROM_Write_Byte_16bit_Wait_For_Addr:
   LDR   R8, [R6]                                      // read SR1
   TST   R8, #(1<<1)                                   // test ADDR
   BEQ   .EEPROM_Write_Byte_16bit_Wait_For_Addr        // wait until set
   LDR   R8, [R7]                                      // clear ADDR by reading SR2
-.EEPROM_Write_Byte_16bit_Send_Memory_Address_High_Byte:
+.EEPROM_Write_Byte_16bit_Send_Memory_addr_High_Byte:
   STR   R1, [R5]                                      // write DR
 .EEPROM_Write_Byte_16bit_Wait_For_TxE_1:
   LDR   R8, [R6]                                      // read SR1
   TST   R8, #(1<<7)                                   // test TxE
   BEQ   .EEPROM_Write_Byte_16bit_Wait_For_TxE_1       // wait until set
-.EEPROM_Write_Byte_16bit_Send_Memory_Address_Low_Byte:
+.EEPROM_Write_Byte_16bit_Send_Memory_addr_Low_Byte:
   STR   R2, [R5]                                      // write DR
 .EEPROM_Write_Byte_16bit_Wait_For_TxE_2:
   LDR   R8, [R6]                                      // read SR1
@@ -549,16 +549,16 @@ EEPROM_Write_Byte_16bit:
   BX    LR                                            // return to caller
 
 /**
- * @brief   Reads a byte from the EEPROM via I2C1 with 16-bit addressing.
+ * @brief   Reads a byte from the EEPROM via I2C1 with 16-bit addring.
  *
  * @details This function reads a byte from the EEPROM using I2C1 with 16-bit memory 
- *          addressing. It sends the device address, high byte of memory address, low 
- *          byte of memory address, then a repeated start and device address (read), 
+ *          addring. It sends the device addr, high byte of memory addr, low 
+ *          byte of memory addr, then a repeated start and device addr (read), 
  *          and reads the data byte with proper NACK generation for single byte read.
  *
- * @param   R0: EEPROM I2C device address (7-bit, e.g., 0x50 for 0xA0)
- * @param   R1: EEPROM memory address high byte
- * @param   R2: EEPROM memory address low byte
+ * @param   R0: EEPROM I2C device addr (7-bit, e.g., 0x50 for 0xA0)
+ * @param   R1: EEPROM memory addr high byte
+ * @param   R2: EEPROM memory addr low byte
  * @retval  R0: Data byte read
  */
 EEPROM_Read_Byte_16bit:
@@ -577,21 +577,21 @@ EEPROM_Read_Byte_16bit:
   LDR   R8, [R6]                                      // read SR1
   TST   R8, #1                                        // test SB
   BEQ   .EEPROM_Read_Byte_16bit_Wait_Start_Bit_1      // wait until set
-.EEPROM_Read_Byte_16bit_Send_Device_Address_1:
-  LSL   R8, R0, #1                                    // left-align address, write=0
+.EEPROM_Read_Byte_16bit_Send_Device_addr_1:
+  LSL   R8, R0, #1                                    // left-align addr, write=0
   STR   R8, [R5]                                      // write DR
 .EEPROM_Read_Byte_16bit_Wait_For_Addr_1:
   LDR   R8, [R6]                                      // read SR1
   TST   R8, #(1<<1)                                   // test ADDR
   BEQ   .EEPROM_Read_Byte_16bit_Wait_For_Addr_1       // wait until set
   LDR   R8, [R7]                                      // clear ADDR by reading SR2
-.EEPROM_Read_Byte_16bit_Send_Memory_Address_High_Byte:
+.EEPROM_Read_Byte_16bit_Send_Memory_addr_High_Byte:
   STR   R1, [R5]                                      // write DR
 .EEPROM_Read_Byte_16bit_Wait_For_TxE_1:
   LDR   R8, [R6]                                      // read SR1
   TST   R8, #(1<<7)                                   // test TxE
   BEQ   .EEPROM_Read_Byte_16bit_Wait_For_TxE_1        // wait until set
-.EEPROM_Read_Byte_16bit_Send_Memory_Address_Low_Byte:
+.EEPROM_Read_Byte_16bit_Send_Memory_addr_Low_Byte:
   STR   R2, [R5]                                      // write DR
 .EEPROM_Read_Byte_16bit_Wait_For_TxE_2:
   LDR   R8, [R6]                                      // read SR1
@@ -605,8 +605,8 @@ EEPROM_Read_Byte_16bit:
   LDR   R8, [R6]                                      // read SR1
   TST   R8, #1                                        // test SB
   BEQ   .EEPROM_Read_Byte_16bit_Wait_Start_Bit_2      // wait until set
-.EEPROM_Read_Byte_16bit_Send_Device_Address_2:
-  LSL   R8, R0, #1                                    // left-align address
+.EEPROM_Read_Byte_16bit_Send_Device_addr_2:
+  LSL   R8, R0, #1                                    // left-align addr
   ORR   R8, #1                                        // set read=1
   STR   R8, [R5]                                      // write DR
 .EEPROM_Read_Byte_16bit_Wait_For_Addr_2:
