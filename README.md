@@ -274,7 +274,7 @@ main:
   MOV   R0, #0x50                                          // EEPROM I2C device address
   MOV   R1, #0x00                                          // EEPROM memory address high byte
   MOV   R2, #0x00                                          // EEPROM memory address low byte
-  MOV   R3, #0x45                                          // data byte to write
+  MOV   R3, #0x99                                          // data byte to write
   BL    EEPROM_Write_Byte_16bit                            // write byte to EEPROM
   BL    Thirty_Microsecond_Delay                           // wait for write cycle
 .EEPROM_Read_Byte_16bit:
@@ -322,12 +322,13 @@ GPIOB_Enable:
 GPIOB_PB8_Alt_Function_Mode_Enable:
 .GPIOB_PB8_Alt_Function_Mode_Enable_Push_Registers:
   PUSH  {R4-R12, LR}                                       // push registers R4-R12, LR stack
-.GPIOB_PB8_Alt_Function_Mode_Enable_Logic:
+.GPIOB_PB8_Alt_Function_Mode_Enable_Set_Moder:
   LDR   R4, =0x40020400                                    // GPIOB_MODER register address
   LDR   R5, [R4]                                           // load value from GPIOB_MODER
   ORR   R5, #(1<<17)                                       // set MODER8[1]
   BIC   R5, #(1<<16)                                       // clear MODER8[0]
   STR   R5, [R4]                                           // store value back
+.GPIOB_PB8_Alt_Function_Mode_Enable_Set_AFRH:
   LDR   R4, =0x40020424                                    // GPIOB_AFRH register address
   LDR   R5, [R4]                                           // load value from GPIOB_AFRH
   BIC   R5, #(1<<3)                                        // clear AFRH8[3]
@@ -350,7 +351,7 @@ GPIOB_PB8_Alt_Function_Mode_Enable:
 GPIOB_PB8_Open_Drain_Enable:
 .GPIOB_PB8_Open_Drain_Enable_Push_Registers:
   PUSH  {R4-R12, LR}                                       // push registers R4-R12, LR stack
-.GPIOB_PB8_Open_Drain_Enable_Logic:
+.GPIOB_PB8_Open_Drain_Enable_Set_OTYPER:
   LDR   R4, =0x40020404                                    // GPIOB_OTYPER register address
   LDR   R5, [R4]                                           // load value from GPIOB_OTYPER
   ORR   R5, #(1<<8)                                        // set OT8 bit
@@ -370,12 +371,13 @@ GPIOB_PB8_Open_Drain_Enable:
 GPIOB_PB9_Alt_Function_Mode_Enable:
 .GPIOB_PB9_Alt_Function_Mode_Enable_Push_Registers:
   PUSH  {R4-R12, LR}                                       // push registers R4-R12, LR stack
-.GPIOB_PB9_Alt_Function_Mode_Enable_Logic:
+.GPIOB_PB9_Alt_Function_Mode_Enable_Set_Moder:
   LDR   R4, =0x40020400                                    // GPIOB_MODER register address
   LDR   R5, [R4]                                           // load value from GPIOB_MODER
   ORR   R5, #(1<<19)                                       // set MODER9[1]
   BIC   R5, #(1<<18)                                       // clear MODER9[0]
   STR   R5, [R4]                                           // store value back
+.GPIOB_PB9_Alt_Function_Mode_Enable_Set_AFRH:
   LDR   R4, =0x40020424                                    // GPIOB_AFRH register address
   LDR   R5, [R4]                                           // load value from GPIOB_AFRH
   BIC   R5, #(1<<7)                                        // clear AFRH9[3]
@@ -398,7 +400,7 @@ GPIOB_PB9_Alt_Function_Mode_Enable:
 GPIOB_PB9_Open_Drain_Enable:
 .GPIOB_PB9_Open_Drain_Enable_Push_Registers:
   PUSH  {R4-R12, LR}                                       // push registers R4-R12, LR stack
-.GPIOB_PB9_Open_Drain_Enable_Logic:
+.GPIOB_PB9_Open_Drain_Enable_Set_OTYPER:
   LDR   R4, =0x40020404                                    // GPIOB_OTYPER register address
   LDR   R5, [R4]                                           // load value from GPIOB_OTYPER
   ORR   R5, #(1<<9)                                        // set OT9 bit
@@ -418,7 +420,7 @@ GPIOB_PB9_Open_Drain_Enable:
 I2C1_Enable:
 .I2C1_Enable_Push_Registers:
   PUSH  {R4-R12, LR}                                       // push registers R4-R12, LR stack
-.I2C1_Enable_Logic:
+.I2C1_Enable_Set_APB1ENR:
   LDR   R4, =0x40023840                                    // RCC_APB1ENR register address
   LDR   R5, [R4]                                           // load value from RCC_APB1ENR
   ORR   R5, #(1<<21)                                       // set I2C1EN bit
@@ -438,13 +440,14 @@ I2C1_Enable:
 I2C1_Init:
 .I2C1_Init_Push_Registers:
   PUSH  {R4-R12, LR}                                       // push registers R4-R12, LR stack
-.I2C1_Init_Logic:
+.I2C1_Init_Reset_CR1:
   LDR   R4, =0x40005400                                    // I2C1_CR1 register address
   LDR   R5, [R4]                                           // load value from I2C1_CR1
   ORR   R5, #(1<<15)                                       // set SWRST bit (software reset)
   STR   R5, [R4]                                           // store value back
   BIC   R5, #(1<<15)                                       // clear SWRST bit
   STR   R5, [R4]                                           // store value back
+.I2C1_Init_Set_CR2:
   LDR   R4, =0x40005404                                    // I2C1_CR2 register address
   LDR   R5, [R4]                                           // load value from I2C1_CR2
   ORR   R5, #(1<<5)                                        // set FREQ[5] 50 MHz (PIML)
@@ -454,6 +457,7 @@ I2C1_Init:
   ORR   R5, #(1<<1)                                        // set FREQ[5] 50 MHz (PIML)
   BIC   R5, #(1<<0)                                        // clear FREQ[5] 50 MHz (PIML)
   STR   R5, [R4]                                           // store value back
+.I2C1_Init_Set_CCR:
   LDR   R4, =0x4000541C                                    // I2C1_CCR register address
   LDR   R5, [R4]                                           // load value from I2C1_CCR
   ORR   R5, #(1<<15)                                       // set F/S bit (fast/std mode)
