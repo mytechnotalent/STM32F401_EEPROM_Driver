@@ -650,13 +650,13 @@ Thirty_Microsecond_Delay:
   PUSH  {R4-R12, LR}                                  // push regs R4-R12, LR stack
   MOV   R4, #7                                        // number of loops
 .Thirty_Microsecond_Delay_Outer_Loop:
-  MOV   R5, #0xA0                                     // set initial delay count
+  MOV   R5, #0xA0                                     // set initial delay cnt
 .Thirty_Microsecond_Delay_Inner_Loop:
-  SUB   R5, #1                                        // decrement delay count
-  CMP   R5, #0                                        // check delay count reached zero
-  BNE   .Thirty_Microsecond_Delay_Inner_Loop          // cont loop delay count not zero
-  SUB   R4, #1                                        // decrement loop counter
-  CMP   R4, #0                                        // check if delay count zero
+  SUB   R5, #1                                        // decrement delay cnt
+  CMP   R5, #0                                        // chk delay cnt reached zero
+  BNE   .Thirty_Microsecond_Delay_Inner_Loop          // cont loop delay cnt not zero
+  SUB   R4, #1                                        // decrement loop cnter
+  CMP   R4, #0                                        // chk if delay cnt zero
   BNE   .Thirty_Microsecond_Delay_Outer_Loop          // cont outer loop if more
 .Thirty_Microsecond_Delay_Pop_Registers:
   POP   {R4-R12, LR}                                  // pop regs R4-R12, LR stack
