@@ -58,7 +58,7 @@ An STM32F401 EEPROM driver written entirely in Assembler.
  * are weak aliases, any function with the same name will override this definition.
  */
 .macro weak name
-  .global \name                                       // make symbol global
+  .Gbl \name                                       // make symbol Gbl
   .weak \name                                         // mark as weak
   .thumb_set \name, Default_Handler                   // set to Default_Handler
   .word \name                                         // vector entry
@@ -74,7 +74,7 @@ An STM32F401 EEPROM driver written entirely in Assembler.
  * The STM32F401RE vector table. Note that the proper constructs must be placed 
  * on this to ensure that it ends up at physical addr 0x00000000.
  */
-.global isr_vector                                    // export vector table
+.Gbl isr_vector                                    // export vector table
 .type isr_vector, %object                             // object type
 isr_vector:
   .word _estack                                       // Initial Stack Pointer
@@ -97,41 +97,41 @@ isr_vector:
    weak EXTI16_PVD_IRQHandler                         // EXTI Line 16 Int PVD
    weak TAMP_STAMP_IRQHandler                         // Tamper/TimeStamp Int
    weak EXTI22_RTC_WKUP_IRQHandler                    // RTC Wakeup Int
-   weak FLASH_IRQHandler                              // FLASH Global Int
-   weak RCC_IRQHandler                                // RCC Global Int
+   weak FLASH_IRQHandler                              // FLASH Gbl Int
+   weak RCC_IRQHandler                                // RCC Gbl Int
    weak EXTI0_IRQHandler                              // EXTI Line0 Int
    weak EXTI1_IRQHandler                              // EXTI Line1 Int
    weak EXTI2_IRQHandler                              // EXTI Line2 Int
    weak EXTI3_IRQHandler                              // EXTI Line3 Int
    weak EXTI4_IRQHandler                              // EXTI Line4 Int
-   weak DMA1_Stream0_IRQHandler                       // DMA1 Stream0 Global Int
-   weak DMA1_Stream1_IRQHandler                       // DMA1 Stream1 Global Int
-   weak DMA1_Stream2_IRQHandler                       // DMA1 Stream2 Global Int
-   weak DMA1_Stream3_IRQHandler                       // DMA1 Stream3 Global Int
-   weak DMA1_Stream4_IRQHandler                       // DMA1 Stream4 Global Int
-   weak DMA1_Stream5_IRQHandler                       // DMA1 Stream5 Global Int
-   weak DMA1_Stream6_IRQHandler                       // DMA1 Stream6 Global Int
-   weak ADC_IRQHandler                                // ADC1 Global Int
+   weak DMA1_Stream0_IRQHandler                       // DMA1 Stream0 Gbl Int
+   weak DMA1_Stream1_IRQHandler                       // DMA1 Stream1 Gbl Int
+   weak DMA1_Stream2_IRQHandler                       // DMA1 Stream2 Gbl Int
+   weak DMA1_Stream3_IRQHandler                       // DMA1 Stream3 Gbl Int
+   weak DMA1_Stream4_IRQHandler                       // DMA1 Stream4 Gbl Int
+   weak DMA1_Stream5_IRQHandler                       // DMA1 Stream5 Gbl Int
+   weak DMA1_Stream6_IRQHandler                       // DMA1 Stream6 Gbl Int
+   weak ADC_IRQHandler                                // ADC1 Gbl Int
   .word 0                                             // Reserved
   .word 0                                             // Reserved
   .word 0                                             // Reserved
   .word 0                                             // Reserved
    weak EXTI9_5_IRQHandler                            // EXTI Line[9:5] Ints
-   weak TIM1_BRK_TIM9_IRQHandle                       // TIM1 Break/TIM9 Global Int
-   weak TIM1_UP_TIM10_IRQHandler                      // TIM1 Update/TIM10 Global Int
-   weak TIM1_TRG_COM_TIM11_IRQHandler                 // TIM1 T/C/TIM11 Global Int
+   weak TIM1_BRK_TIM9_IRQHandle                       // TIM1 Break/TIM9 Gbl Int
+   weak TIM1_UP_TIM10_IRQHandler                      // TIM1 Update/TIM10 Gbl Int
+   weak TIM1_TRG_COM_TIM11_IRQHandler                 // TIM1 T/C/TIM11 Gbl Int
    weak TIM1_CC_IRQHandler                            // TIM1 Capture Compare Int
-   weak TIM2_IRQHandler                               // TIM2 Global Int
-   weak TIM3_IRQHandler                               // TIM3 Global Int
-   weak TIM4_IRQHandler                               // TIM4 Global Int
+   weak TIM2_IRQHandler                               // TIM2 Gbl Int
+   weak TIM3_IRQHandler                               // TIM3 Gbl Int
+   weak TIM4_IRQHandler                               // TIM4 Gbl Int
    weak I2C1_EV_IRQHandler                            // I2C1 Event Int
    weak I2C1_ER_IRQHandler                            // I2C1 Error Int
    weak I2C2_EV_IRQHandler                            // I2C2 Event Int
    weak I2C2_ER_IRQHandler                            // I2C2 Error Int
-   weak SPI1_IRQHandler                               // SPI1 Global Int
-   weak SPI2_IRQHandler                               // SPI2 Global Int
-   weak USART1_IRQHandler                             // USART1 Global Int
-   weak USART2_IRQHandler                             // USART2 Global Int
+   weak SPI1_IRQHandler                               // SPI1 Gbl Int
+   weak SPI2_IRQHandler                               // SPI2 Gbl Int
+   weak USART1_IRQHandler                             // USART1 Gbl Int
+   weak USART2_IRQHandler                             // USART2 Gbl Int
   .word 0                                             // Reserved
    weak EXTI15_10_IRQHandler                          // EXTI Line[15:10] Ints
    weak EXTI17_RTC_Alarm_IRQHandler                   // RTC Alarms EXTI
@@ -140,31 +140,31 @@ isr_vector:
   .word 0                                             // Reserved
   .word 0                                             // Reserved
   .word 0                                             // Reserved
-   weak DMA1_Stream7_IRQHandler                       // DMA1 Stream7 Global Int
+   weak DMA1_Stream7_IRQHandler                       // DMA1 Stream7 Gbl Int
   .word 0                                             // Reserved
-   weak SDIO_IRQHandler                               // SDIO Global Int
-   weak TIM5_IRQHandler                               // TIM5 Global Int
-   weak SPI3_IRQHandler                               // SPI3 Global Int
-  .word 0                                             // Reserved
-  .word 0                                             // Reserved
-  .word 0                                             // Reserved
-  .word 0                                             // Reserved
-   weak DMA2_Stream0_IRQHandler                       // DMA2 Stream0 Global Int
-   weak DMA2_Stream1_IRQHandler                       // DMA2 Stream1 Global Int
-   weak DMA2_Stream2_IRQHandler                       // DMA2 Stream2 Global Int
-   weak DMA2_Stream3_IRQHandler                       // DMA2 Stream3 Global Int
-   weak DMA2_Stream4_IRQHandler                       // DMA2 Stream4 Global Int
+   weak SDIO_IRQHandler                               // SDIO Gbl Int
+   weak TIM5_IRQHandler                               // TIM5 Gbl Int
+   weak SPI3_IRQHandler                               // SPI3 Gbl Int
   .word 0                                             // Reserved
   .word 0                                             // Reserved
   .word 0                                             // Reserved
   .word 0                                             // Reserved
+   weak DMA2_Stream0_IRQHandler                       // DMA2 Stream0 Gbl Int
+   weak DMA2_Stream1_IRQHandler                       // DMA2 Stream1 Gbl Int
+   weak DMA2_Stream2_IRQHandler                       // DMA2 Stream2 Gbl Int
+   weak DMA2_Stream3_IRQHandler                       // DMA2 Stream3 Gbl Int
+   weak DMA2_Stream4_IRQHandler                       // DMA2 Stream4 Gbl Int
   .word 0                                             // Reserved
   .word 0                                             // Reserved
-   weak OTG_FS_IRQHandler                             // USB OTG FS Global Int
-   weak DMA2_Stream5_IRQHandler                       // DMA2 Stream5 Global Int
-   weak DMA2_Stream6_IRQHandler                       // DMA2 Stream6 Global Int
-   weak DMA2_Stream7_IRQHandler                       // DMA2 Stream7 Global Int
-   weak USART6_IRQHandler                             // USART6 Global Int
+  .word 0                                             // Reserved
+  .word 0                                             // Reserved
+  .word 0                                             // Reserved
+  .word 0                                             // Reserved
+   weak OTG_FS_IRQHandler                             // USB OTG FS Gbl Int
+   weak DMA2_Stream5_IRQHandler                       // DMA2 Stream5 Gbl Int
+   weak DMA2_Stream6_IRQHandler                       // DMA2 Stream6 Gbl Int
+   weak DMA2_Stream7_IRQHandler                       // DMA2 Stream7 Gbl Int
+   weak USART6_IRQHandler                             // USART6 Gbl Int
    weak I2C3_EV_IRQHandler                            // I2C3 Event Int
    weak I2C3_ER_IRQHandler                            // I2C3 Error Int
   .word 0                                             // Reserved
@@ -177,7 +177,7 @@ isr_vector:
   .word 0                                             // Reserved
   .word 0                                             // Reserved
   .word 0                                             // Reserved
-   weak SPI4_IRQHandler                               // SPI4 Global Int
+   weak SPI4_IRQHandler                               // SPI4 Gbl Int
 
 /**
  * @brief   This code is called when processor starts execution.
@@ -191,7 +191,7 @@ isr_vector:
  * @retval  None
  */
 .type Reset_Handler, %function                        // function type
-.global Reset_Handler                                 // export symbol
+.Gbl Reset_Handler                                 // export symbol
 Reset_Handler:
 .Reset_Handler_Setup:
   LDR   R4, =_estack                                  // load addr at end of stack R4
@@ -232,7 +232,7 @@ Reset_Handler:
  * @retval  None
  */
 .type Default_Handler, %function                      // function type
-.global Default_Handler                               // export symbol
+.Gbl Default_Handler                               // export symbol
 Default_Handler:
   BKPT                                                // set processor into debug state
   B.N   Default_Handler                               // infinite loop
@@ -254,7 +254,7 @@ Default_Handler:
  * @retval  None
  */
 .type main, %function
-.global main
+.Gbl main
 main:
 .Push_Registers:
   PUSH  {R4-R12, LR}                                  // push regs R4-R12, LR stack
@@ -682,14 +682,14 @@ Loop:
 .section .rodata                                      // read-only data section
 
 /**
- * Initialized global data.
- * The .data section is used for initialized global or static variables.
+ * Initialized Gbl data.
+ * The .data section is used for initialized Gbl or static variables.
  */
 .section .data                                        // data section
 
 /**
- * Uninitialized global data.
- * The .bss section is used for uninitialized global or static variables.
+ * Uninitialized Gbl data.
+ * The .bss section is used for uninitialized Gbl or static variables.
  */
 .section .bss                                         // BSS section
 ```
