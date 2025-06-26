@@ -94,81 +94,79 @@ isr_vector:
    weak PendSV_Handler                                // PendSV Handler
    weak SysTick_Handler                               // SysTick Handler
   .word 0                                             // Reserved
-   weak EXTI16_PVD_IRQHandler                         // EXTI Line 16 Interrupt PVD
-   weak TAMP_STAMP_IRQHandler                         // Tamper/TimeStamp Interrupt
-   weak EXTI22_RTC_WKUP_IRQHandler                    // RTC Wakeup Interrupt
-   weak FLASH_IRQHandler                              // FLASH Global Interrupt
-   weak RCC_IRQHandler                                // RCC Global Interrupt
-   weak EXTI0_IRQHandler                              // EXTI Line0 Interrupt
-   weak EXTI1_IRQHandler                              // EXTI Line1 Interrupt
-   weak EXTI2_IRQHandler                              // EXTI Line2 Interrupt
-   weak EXTI3_IRQHandler                              // EXTI Line3 Interrupt
-   weak EXTI4_IRQHandler                              // EXTI Line4 Interrupt
-   weak DMA1_Stream0_IRQHandler                       // DMA1 Stream0 Global Interrupt
-   weak DMA1_Stream1_IRQHandler                       // DMA1 Stream1 Global Interrupt
-   weak DMA1_Stream2_IRQHandler                       // DMA1 Stream2 Global Interrupt
-   weak DMA1_Stream3_IRQHandler                       // DMA1 Stream3 Global Interrupt
-   weak DMA1_Stream4_IRQHandler                       // DMA1 Stream4 Global Interrupt
-   weak DMA1_Stream5_IRQHandler                       // DMA1 Stream5 Global Interrupt
-   weak DMA1_Stream6_IRQHandler                       // DMA1 Stream6 Global Interrupt
-   weak ADC_IRQHandler                                // ADC1 Global Interrupt
+   weak EXTI16_PVD_IRQHandler                         // EXTI Line 16 Int PVD
+   weak TAMP_STAMP_IRQHandler                         // Tamper/TimeStamp Int
+   weak EXTI22_RTC_WKUP_IRQHandler                    // RTC Wakeup Int
+   weak FLASH_IRQHandler                              // FLASH Global Int
+   weak RCC_IRQHandler                                // RCC Global Int
+   weak EXTI0_IRQHandler                              // EXTI Line0 Int
+   weak EXTI1_IRQHandler                              // EXTI Line1 Int
+   weak EXTI2_IRQHandler                              // EXTI Line2 Int
+   weak EXTI3_IRQHandler                              // EXTI Line3 Int
+   weak EXTI4_IRQHandler                              // EXTI Line4 Int
+   weak DMA1_Stream0_IRQHandler                       // DMA1 Stream0 Global Int
+   weak DMA1_Stream1_IRQHandler                       // DMA1 Stream1 Global Int
+   weak DMA1_Stream2_IRQHandler                       // DMA1 Stream2 Global Int
+   weak DMA1_Stream3_IRQHandler                       // DMA1 Stream3 Global Int
+   weak DMA1_Stream4_IRQHandler                       // DMA1 Stream4 Global Int
+   weak DMA1_Stream5_IRQHandler                       // DMA1 Stream5 Global Int
+   weak DMA1_Stream6_IRQHandler                       // DMA1 Stream6 Global Int
+   weak ADC_IRQHandler                                // ADC1 Global Int
   .word 0                                             // Reserved
   .word 0                                             // Reserved
   .word 0                                             // Reserved
   .word 0                                             // Reserved
-   weak EXTI9_5_IRQHandler                            // EXTI Line[9:5] Interrupts
-   weak TIM1_BRK_TIM9_IRQHandle                       // TIM1 Break/TIM9 Global Interrupt
-   weak TIM1_UP_TIM10_IRQHandler                      // TIM1 Update/TIM10 Global Interrupt
-   weak TIM1_TRG_COM_TIM11_IRQHandler                 // TIM1 T/C/TIM11 Global Interrupt
-   weak TIM1_CC_IRQHandler                            // TIM1 Capture Compare Interrupt
-   weak TIM2_IRQHandler                               // TIM2 Global Interrupt
-   weak TIM3_IRQHandler                               // TIM3 Global Interrupt
-   weak TIM4_IRQHandler                               // TIM4 Global Interrupt
-   weak I2C1_EV_IRQHandler                            // I2C1 Event Interrupt
-   weak I2C1_ER_IRQHandler                            // I2C1 Error Interrupt
-   weak I2C2_EV_IRQHandler                            // I2C2 Event Interrupt
-   weak I2C2_ER_IRQHandler                            // I2C2 Error Interrupt
-   weak SPI1_IRQHandler                               // SPI1 Global Interrupt
-   weak SPI2_IRQHandler                               // SPI2 Global Interrupt
-   weak USART1_IRQHandler                             // USART1 Global Interrupt
-   weak USART2_IRQHandler                             // USART2 Global Interrupt
+   weak EXTI9_5_IRQHandler                            // EXTI Line[9:5] Ints
+   weak TIM1_BRK_TIM9_IRQHandle                       // TIM1 Break/TIM9 Global Int
+   weak TIM1_UP_TIM10_IRQHandler                      // TIM1 Update/TIM10 Global Int
+   weak TIM1_TRG_COM_TIM11_IRQHandler                 // TIM1 T/C/TIM11 Global Int
+   weak TIM1_CC_IRQHandler                            // TIM1 Capture Compare Int
+   weak TIM2_IRQHandler                               // TIM2 Global Int
+   weak TIM3_IRQHandler                               // TIM3 Global Int
+   weak TIM4_IRQHandler                               // TIM4 Global Int
+   weak I2C1_EV_IRQHandler                            // I2C1 Event Int
+   weak I2C1_ER_IRQHandler                            // I2C1 Error Int
+   weak I2C2_EV_IRQHandler                            // I2C2 Event Int
+   weak I2C2_ER_IRQHandler                            // I2C2 Error Int
+   weak SPI1_IRQHandler                               // SPI1 Global Int
+   weak SPI2_IRQHandler                               // SPI2 Global Int
+   weak USART1_IRQHandler                             // USART1 Global Int
+   weak USART2_IRQHandler                             // USART2 Global Int
   .word 0                                             // Reserved
-   weak EXTI15_10_IRQHandler                          // EXTI Line[15:10] Interrupts
+   weak EXTI15_10_IRQHandler                          // EXTI Line[15:10] Ints
    weak EXTI17_RTC_Alarm_IRQHandler                   // RTC Alarms EXTI
    weak EXTI18_OTG_FS_WKUP_IRQHandler                 // USB OTG FS Wakeup EXTI
   .word 0                                             // Reserved
   .word 0                                             // Reserved
   .word 0                                             // Reserved
   .word 0                                             // Reserved
-   weak DMA1_Stream7_IRQHandler                       // DMA1 Stream7 Global Interrupt
+   weak DMA1_Stream7_IRQHandler                       // DMA1 Stream7 Global Int
   .word 0                                             // Reserved
-   weak SDIO_IRQHandler                               // SDIO Global Interrupt
-   weak TIM5_IRQHandler                               // TIM5 Global Interrupt
-   weak SPI3_IRQHandler                               // SPI3 Global Interrupt
-  .word 0                                             // Reserved
-  .word 0                                             // Reserved
-  .word 0                                             // Reserved
-  .word 0                                             // Reserved
-   weak DMA2_Stream0_IRQHandler                       // DMA2 Stream0 Global Interrupt
-   weak DMA2_Stream1_IRQHandler                       // DMA2 Stream1 Global Interrupt
-   weak DMA2_Stream2_IRQHandler                       // DMA2 Stream2 Global Interrupt
-   weak DMA2_Stream3_IRQHandler                       // DMA2 Stream3 Global Interrupt
-   weak DMA2_Stream4_IRQHandler                       // DMA2 Stream4 Global Interrupt
+   weak SDIO_IRQHandler                               // SDIO Global Int
+   weak TIM5_IRQHandler                               // TIM5 Global Int
+   weak SPI3_IRQHandler                               // SPI3 Global Int
   .word 0                                             // Reserved
   .word 0                                             // Reserved
   .word 0                                             // Reserved
   .word 0                                             // Reserved
+   weak DMA2_Stream0_IRQHandler                       // DMA2 Stream0 Global Int
+   weak DMA2_Stream1_IRQHandler                       // DMA2 Stream1 Global Int
+   weak DMA2_Stream2_IRQHandler                       // DMA2 Stream2 Global Int
+   weak DMA2_Stream3_IRQHandler                       // DMA2 Stream3 Global Int
+   weak DMA2_Stream4_IRQHandler                       // DMA2 Stream4 Global Int
   .word 0                                             // Reserved
   .word 0                                             // Reserved
-   weak OTG_FS_IRQHandler                             // USB OTG FS Global Interrupt
-   weak DMA2_Stream5_IRQHandler                       // DMA2 Stream5 Global Interrupt
-   weak DMA2_Stream6_IRQHandler                       // DMA2 Stream6 Global Interrupt
-   weak DMA2_Stream7_IRQHandler                       // DMA2 Stream7 Global Interrupt
-   weak USART6_IRQHandler                             // USART6 Global Interrupt
-   weak I2C3_EV_IRQHandler                            // I2C3 Event Interrupt
-   weak I2C3_ER_IRQHandler                            // I2C3 Error Interrupt
   .word 0                                             // Reserved
   .word 0                                             // Reserved
+  .word 0                                             // Reserved
+  .word 0                                             // Reserved
+   weak OTG_FS_IRQHandler                             // USB OTG FS Global Int
+   weak DMA2_Stream5_IRQHandler                       // DMA2 Stream5 Global Int
+   weak DMA2_Stream6_IRQHandler                       // DMA2 Stream6 Global Int
+   weak DMA2_Stream7_IRQHandler                       // DMA2 Stream7 Global Int
+   weak USART6_IRQHandler                             // USART6 Global Int
+   weak I2C3_EV_IRQHandler                            // I2C3 Event Int
+   weak I2C3_ER_IRQHandler                            // I2C3 Error Int
   .word 0                                             // Reserved
   .word 0                                             // Reserved
   .word 0                                             // Reserved
@@ -177,7 +175,9 @@ isr_vector:
   .word 0                                             // Reserved
   .word 0                                             // Reserved
   .word 0                                             // Reserved
-   weak SPI4_IRQHandler                               // SPI4 Global Interrupt
+  .word 0                                             // Reserved
+  .word 0                                             // Reserved
+   weak SPI4_IRQHandler                               // SPI4 Global Int
 
 /**
  * @brief   This code is called when processor starts execution.
@@ -223,7 +223,7 @@ Reset_Handler:
   BL    main                                          // call main
 
 /**
- * @brief   This code is called when the processor receives an unexpected interrupt.
+ * @brief   This code is called when the processor receives an unexpected Int.
  *
  * @details This simply enters an infinite loop, preserving the system state for  
  *          examination by a debugger.
@@ -246,9 +246,9 @@ Default_Handler:
 /**
  * @brief   Entry point for EEPROM driver initialization and main loop.
  *
- * @details This function initializes the GPIO and I2C peripherals for EEPROM communication
- *          communication and enters an infinite loop. All code and comments are tailored 
- *          for EEPROM.
+ * @details This function initializes the GPIO and I2C peripherals for EEPROM
+ *          communication and enters an infinite loop. All code and comments 
+ *          are tailored for EEPROM.
  *
  * @param   None
  * @retval  None
