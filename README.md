@@ -246,9 +246,9 @@ Default_Handler:
 /**
  * @brief   Entry point for EEPROM driver initialization and main loop.
  *
- * @details This function initializes the GPIO and I2C peripherals for EEPROM communication
- *          communication and enters an infinite loop. All code and comments are tailored 
- *          for EEPROM.
+ * @details This function initializes the GPIO and I2C peripherals for EEPROM
+ *          communication and enters an infinite loop. All code and comments
+ *          are tailored for EEPROM.
  *
  * @param   None
  * @retval  None
