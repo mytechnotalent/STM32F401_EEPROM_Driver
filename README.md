@@ -179,48 +179,6 @@ isr_vector:
   .word 0                                             // Reserved
    weak SPI4_IRQHandler                               // SPI4 Gbl Int
 
-/**
- * @brief   This code is called when processor starts execution.
- *
- * @details This is the code that gets called when the processor first
- *          starts execution following a reset event. We first define and init 
- *          the bss section and then define and init the data section, after which
- *          the application supplied main routine is called.
- *
- * @param   None
- * @retval  None
- */
-.type Reset_Handler, %function                        // function type
-.Gbl Reset_Handler                                 // export symbol
-Reset_Handler:
-.Reset_Handler_Setup:
-  LDR   R4, =_estack                                  // load addr at end of stack R4
-  MOV   SP, R4                                        // move addr at end of stack SP
-  LDR   R4, =_sdata                                   // cp data seg init flash to SRAM
-  LDR   R5, =_edata                                   // cp data seg init flash to SRAM
-  LDR   R6, =_sidata                                  // cp data seg init flash to SRAM
-  MOVS  R7, #0                                        // zero offset
-  B     .Reset_Handler_Loop_cp_Data_Init              // branch
-.Reset_Handler_cp_Data_Init:
-  LDR   R8, [R6, R7]                                  // cp data seg init to regs
-  STR   R8, [R4, R7]                                  // cp data seg init tp regs
-  ADDS  R7, R7, #4                                    // increment offset
-.Reset_Handler_Loop_cp_Data_Init:
-  ADDS  R8, R4, R7                                    // initialize the data segment
-  CMP   R8, R5                                        // compare
-  BCC   .Reset_Handler_cp_Data_Init                   // branch if carry is clear
-  LDR   R6, =_sbss                                    // cp bss seg init flash to SRAM
-  LDR   R8, =_ebss                                    // cp bss seg init flash to SRAM
-  MOVS  R7, #0                                        // zero offset
-  B     .Reset_Handler_Loop_Fill_Zero_BSS             // branch
-.Reset_Handler_Fill_Zero_BSS:
-  STR   R7, [R6]                                      // zero fill the bss segment
-  ADDS  R6, R6, #4                                    // increment pointer
-.Reset_Handler_Loop_Fill_Zero_BSS:
-  CMP   R6, R8                                        // compare
-  BCC   .Reset_Handler_Fill_Zero_BSS                  // branch if carry is clear
-.Reset_Handler_Call_Main:
-  BL    main                                          // call main
 
 /**
  * @brief   This code is called when the processor receives an unexpected Int.
