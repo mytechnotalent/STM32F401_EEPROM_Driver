@@ -244,7 +244,7 @@ Default_Handler:
 .global main
 main:
 .Push_Registers:
-  PUSH  {R4-R12, LR}                                  // push registers R4-R12, LR stack
+  PUSH  {R4-R12, LR}                                  // push regs R4-R12, LR stack
 .GPIOB_Enable:
   BL    GPIOB_Enable                                  // enable GPIOB peripheral
 .GPIOB_PB8_Alt_Function_Mode_Enable:
@@ -274,7 +274,7 @@ main:
 .Loop:
   BL    Loop                                          // enter infinite loop
 .Pop_Registers:
-  POP   {R4-R12, LR}                                  // pop registers R4-R12, LR stack
+  POP   {R4-R12, LR}                                  // pop regs R4-R12, LR stack
   BX    LR                                            // return to caller
 
 /**
@@ -290,14 +290,14 @@ main:
  */
 GPIOB_Enable:
 .GPIOB_Enable_Push_Registers:
-  PUSH  {R4-R12, LR}                                  // push registers R4-R12, LR stack
+  PUSH  {R4-R12, LR}                                  // push regs R4-R12, LR stack
 .GPIOB_Enable_Load_RCC_AHB1ENR:
   LDR   R4, =0x40023830                               // RCC_AHB1ENR register address
   LDR   R5, [R4]                                      // load value from RCC_AHB1ENR
   ORR   R5, #(1<<1)                                   // set GPIOBEN bit
   STR   R5, [R4]                                      // store value back
 .GPIOB_Enable_Pop_Registers:
-  POP   {R4-R12, LR}                                  // pop registers R4-R12, LR stack
+  POP   {R4-R12, LR}                                  // pop regs R4-R12, LR stack
   BX    LR                                            // return to caller
 
 /**
@@ -310,7 +310,7 @@ GPIOB_Enable:
  */
 GPIOB_PB8_Alt_Function_Mode_Enable:
 .GPIOB_PB8_Alt_Function_Mode_Enable_Push_Registers:
-  PUSH  {R4-R12, LR}                                  // push registers R4-R12, LR stack
+  PUSH  {R4-R12, LR}                                  // push regs R4-R12, LR stack
 .GPIOB_PB8_Alt_Function_Mode_Enable_Set_Moder:
   LDR   R4, =0x40020400                               // GPIOB_MODER register address
   LDR   R5, [R4]                                      // load value from GPIOB_MODER
@@ -326,7 +326,7 @@ GPIOB_PB8_Alt_Function_Mode_Enable:
   BIC   R5, #(1<<0)                                   // clear AFRH8[0]
   STR   R5, [R4]                                      // store value back
 .GPIOB_PB8_Alt_Function_Mode_Enable_Pop_Registers:
-  POP   {R4-R12, LR}                                  // pop registers R4-R12, LR stack
+  POP   {R4-R12, LR}                                  // pop regs R4-R12, LR stack
   BX    LR                                            // return to caller
 
 /**
@@ -339,14 +339,14 @@ GPIOB_PB8_Alt_Function_Mode_Enable:
  */
 GPIOB_PB8_Open_Drain_Enable:
 .GPIOB_PB8_Open_Drain_Enable_Push_Registers:
-  PUSH  {R4-R12, LR}                                  // push registers R4-R12, LR stack
+  PUSH  {R4-R12, LR}                                  // push regs R4-R12, LR stack
 .GPIOB_PB8_Open_Drain_Enable_Set_OTYPER:
   LDR   R4, =0x40020404                               // GPIOB_OTYPER register address
   LDR   R5, [R4]                                      // load value from GPIOB_OTYPER
   ORR   R5, #(1<<8)                                   // set OT8 bit
   STR   R5, [R4]                                      // store value back
 .GPIOB_PB8_Open_Drain_Enable_Pop_Registers:
-  POP   {R4-R12, LR}                                  // pop registers R4-R12, LR stack
+  POP   {R4-R12, LR}                                  // pop regs R4-R12, LR stack
   BX    LR                                            // return to caller
 
 /**
@@ -359,7 +359,7 @@ GPIOB_PB8_Open_Drain_Enable:
  */
 GPIOB_PB9_Alt_Function_Mode_Enable:
 .GPIOB_PB9_Alt_Function_Mode_Enable_Push_Registers:
-  PUSH  {R4-R12, LR}                                  // push registers R4-R12, LR stack
+  PUSH  {R4-R12, LR}                                  // push regs R4-R12, LR stack
 .GPIOB_PB9_Alt_Function_Mode_Enable_Set_Moder:
   LDR   R4, =0x40020400                               // GPIOB_MODER register address
   LDR   R5, [R4]                                      // load value from GPIOB_MODER
@@ -375,7 +375,7 @@ GPIOB_PB9_Alt_Function_Mode_Enable:
   BIC   R5, #(1<<4)                                   // clear AFRH9[0]
   STR   R5, [R4]                                      // store value back
 .GPIOB_PB9_Alt_Function_Mode_Enable_Pop_Registers:
-  POP   {R4-R12, LR}                                  // pop registers R4-R12, LR stack
+  POP   {R4-R12, LR}                                  // pop regs R4-R12, LR stack
   BX    LR                                            // return to caller
 
 /**
@@ -388,14 +388,14 @@ GPIOB_PB9_Alt_Function_Mode_Enable:
  */
 GPIOB_PB9_Open_Drain_Enable:
 .GPIOB_PB9_Open_Drain_Enable_Push_Registers:
-  PUSH  {R4-R12, LR}                                  // push registers R4-R12, LR stack
+  PUSH  {R4-R12, LR}                                  // push regs R4-R12, LR stack
 .GPIOB_PB9_Open_Drain_Enable_Set_OTYPER:
   LDR   R4, =0x40020404                               // GPIOB_OTYPER register address
   LDR   R5, [R4]                                      // load value from GPIOB_OTYPER
   ORR   R5, #(1<<9)                                   // set OT9 bit
   STR   R5, [R4]                                      // store value back
 .GPIOB_PB9_Open_Drain_Enable_Pop_Registers:
-  POP   {R4-R12, LR}                                  // pop registers R4-R12, LR stack
+  POP   {R4-R12, LR}                                  // pop regs R4-R12, LR stack
   BX    LR                                            // return to caller
 
 /**
@@ -409,14 +409,14 @@ GPIOB_PB9_Open_Drain_Enable:
  */
 I2C1_Enable:
 .I2C1_Enable_Push_Registers:
-  PUSH  {R4-R12, LR}                                  // push registers R4-R12, LR stack
+  PUSH  {R4-R12, LR}                                  // push regs R4-R12, LR stack
 .I2C1_Enable_Set_APB1ENR:
   LDR   R4, =0x40023840                               // RCC_APB1ENR register address
   LDR   R5, [R4]                                      // load value from RCC_APB1ENR
   ORR   R5, #(1<<21)                                  // set I2C1EN bit
   STR   R5, [R4]                                      // store value back
 .I2C1_Enable_Pop_Registers:
-  POP   {R4-R12, LR}                                  // pop registers R4-R12, LR stack
+  POP   {R4-R12, LR}                                  // pop regs R4-R12, LR stack
   BX    LR                                            // return to caller
 
 /**
@@ -430,7 +430,7 @@ I2C1_Enable:
  */
 I2C1_Init:
 .I2C1_Init_Push_Registers:
-  PUSH  {R4-R12, LR}                                  // push registers R4-R12, LR stack
+  PUSH  {R4-R12, LR}                                  // push regs R4-R12, LR stack
 .I2C1_Init_Reset_CR1:
   LDR   R4, =0x40005400                               // I2C1_CR1 register address
   LDR   R5, [R4]                                      // load value from I2C1_CR1
@@ -469,7 +469,7 @@ I2C1_Init:
   ORR   R5, #(1<<0)                                   // set PE bit (peripheral enable)
   STR   R5, [R4]                                      // store value back
 .I2C1_Init_Pop_Registers:
-  POP   {R4-R12, LR}                                  // pop registers R4-R12, LR stack
+  POP   {R4-R12, LR}                                  // pop regs R4-R12, LR stack
   BX    LR                                            // return to caller
 
 /**
@@ -487,7 +487,7 @@ I2C1_Init:
  */
 EEPROM_Write_Byte_16bit:
 .EEPROM_Write_Byte_16bit_Push_Registers:
-  PUSH  {R4-R12, LR}                                  // push registers R4-R12, LR stack
+  PUSH  {R4-R12, LR}                                  // push regs R4-R12, LR stack
 .EEPROM_Write_Byte_16bit_Init_Load_Registers:
   LDR   R4, =0x40005400                               // I2C1_CR1 register
   LDR   R5, =0x40005410                               // I2C1_DR register
@@ -532,7 +532,7 @@ EEPROM_Write_Byte_16bit:
   ORR   R8, #(1<<9)                                   // set STOP
   STR   R8, [R4]                                      // write CR1
 .EEPROM_Write_Byte_16bit_Pop_Registers:
-  POP   {R4-R12, LR}                                  // pop registers R4-R12, LR stack
+  POP   {R4-R12, LR}                                  // pop regs R4-R12, LR stack
   BX    LR                                            // return to caller
 
 /**
@@ -550,7 +550,7 @@ EEPROM_Write_Byte_16bit:
  */
 EEPROM_Read_Byte_16bit:
 .EEPROM_Read_Byte_16bit_Push_Registers:
-  PUSH  {R4-R12, LR}                                  // push registers R4-R12, LR stack
+  PUSH  {R4-R12, LR}                                  // push regs R4-R12, LR stack
 .EEPROM_Read_Byte_16bit_Init_Load_Registers:
   LDR   R4, =0x40005400                               // I2C1_CR1 register
   LDR   R5, =0x40005410                               // I2C1_DR register
@@ -620,7 +620,7 @@ EEPROM_Read_Byte_16bit:
   ORR   R8, #(1<<10)                                  // set ACK bit
   STR   R8, [R4]                                      // write CR1
 .EEPROM_Read_Byte_16bit_Pop_Registers:
-  POP   {R4-R12, LR}                                  // pop registers R4-R12, LR stack
+  POP   {R4-R12, LR}                                  // pop regs R4-R12, LR stack
   BX    LR                                            // return to caller
 
 /**
@@ -634,7 +634,7 @@ EEPROM_Read_Byte_16bit:
  */
 Thirty_Microsecond_Delay:
 .Thirty_Microsecond_Delay_Push_Registers:
-  PUSH  {R4-R12, LR}                                  // push registers R4-R12, LR stack
+  PUSH  {R4-R12, LR}                                  // push regs R4-R12, LR stack
   MOV   R4, #7                                        // number of loops
 .Thirty_Microsecond_Delay_Outer_Loop:
   MOV   R5, #0xA0                                     // set initial delay count
@@ -646,7 +646,7 @@ Thirty_Microsecond_Delay:
   CMP   R4, #0                                        // check if delay count zero
   BNE   .Thirty_Microsecond_Delay_Outer_Loop          // cont outer loop if more
 .Thirty_Microsecond_Delay_Pop_Registers:
-  POP   {R4-R12, LR}                                  // pop registers R4-R12, LR stack
+  POP   {R4-R12, LR}                                  // pop regs R4-R12, LR stack
   BX    LR                                            // return to caller
 
 /**
