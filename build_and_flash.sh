@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# Build and Flash Script for STM32F401RE Persistent Flash Driver
-# This script builds the assembly project and flashes it to the STM32F401RE microcontroller
+# Build and Flash Script for STM32F401RE.
+# This script builds the assembly project and flashes it to the STM32F401RE microcontroller.
 
 # Exit on any error
 set -e
@@ -13,8 +13,8 @@ YELLOW='\033[1;33m'
 NC='\033[0m' # No Color
 
 # Echo script information
-echo -e "${YELLOW}STM32F401RE Persistent Flash Driver - Build and Flash Script${NC}"
-echo    "=========================================================================="
+echo -e "${YELLOW}STM32F401RE - Build and Flash Script${NC}"
+echo    "=================================================="
 
 # Change to project directory
 cd project
@@ -60,7 +60,6 @@ read -p "Press [Enter] to continue with flashing..."
 openocd -f interface/stlink.cfg -f target/stm32f4x.cfg -c "program main.elf verify reset exit"
 if [ $? -eq 0 ]; then
     echo -e "${GREEN}✓ Flashing completed successfully${NC}"
-    echo -e "${GREEN}✓ STM32F401RE Persistent Flash Driver is now running on your board!${NC}"
 else
     echo -e "${RED}✗ Flashing failed${NC}"
     echo -e "${RED}Please check your board connection and try again${NC}"
